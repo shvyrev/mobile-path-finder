@@ -8,10 +8,6 @@ package Threads;
  *
  * @author rajeevan
  */
-public class WalkingDistanceError extends Exception {
-
-    public String toString() {
-        return "the updating position is too high";
-    }
+public class BluetoothReceiver {
     
 }

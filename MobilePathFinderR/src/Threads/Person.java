@@ -4,6 +4,7 @@
  */
 package Threads;
 
+import Exceptions.WalkingDistanceError;
 import DataStructure.Direction;
 
 /**
