@@ -42,5 +42,8 @@ public class Direction {
         CurrentDirection%=8;
     }
     
+    public void setCurrentDirection(int pastX,int pastY,int X,int Y){
+        
+    }
     
 }
