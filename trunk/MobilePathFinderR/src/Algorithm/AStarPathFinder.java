@@ -73,7 +73,7 @@ public class AStarPathFinder implements PathFinder {
             } else if (f > of) {
                 return 1;
             } else {
-                System.out.println("this is not cool");
+                //System.out.println("this is not cool");
                 return 0;
 
             }
