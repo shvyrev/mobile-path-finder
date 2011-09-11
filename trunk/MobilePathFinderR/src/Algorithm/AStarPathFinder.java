@@ -16,7 +16,6 @@ public class AStarPathFinder implements PathFinder {
     ///##########################################################################
     private VectorSub closed = new VectorSub();
     private SortedList open = new SortedList();
-    //private Map map;
     private int maxSearchDistance;
     private Node[][] nodes;
     private boolean allowDiagMovement = true;
@@ -266,6 +265,8 @@ public class AStarPathFinder implements PathFinder {
         return heuristic.getCost(x, y, tx, ty);
     }
 
+    //this is the actual implementation of A* path finding algorithm
+    
     public Path findPath(int sx, int sy, int tx, int ty,Map map) {
         // first check, if the destination is blocked, we can't get there
         if (map.isBlocked(tx, ty).booleanValue()) {
