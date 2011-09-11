@@ -43,33 +43,28 @@ public class CartisianMap implements Map {
         this.height = height;
         this.floor = flr;
         this.path = new Path();
-        //     System.out.println(flr[0][0]);
     }
 
-   
     public int getWidth() {
         return this.width;
     }
 
-    
     public int getHeight() {
         return this.height;
     }
 
-   
     public Boolean isBlocked(int x, int y) {
-        return floor[x][y].booleanValue()?Boolean.FALSE:Boolean.TRUE;
+        return floor[x][y].booleanValue() ? Boolean.FALSE : Boolean.TRUE;
     }
 
     public void setMap(Boolean[][] floor) {
         this.floor = floor;
     }
 
-
     public String toString() {
         String s = "";
-        if(path==null){
-            s+="No Path Available!";
+        if (path == null) {
+            s += "No Path Available!";
         }
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
@@ -85,30 +80,23 @@ public class CartisianMap implements Map {
         return s;
     }
 
-
     public void setPath(Path p) {
         this.path = p;
     }
 
- 
     public Path getPath() {
         return path;
     }
-
 
     public Boolean[][] getFloorPlan() {
         return floor;
     }
 
-
     public Boolean getValue(int x, int y) {
         return floor[x][y];
     }
 
-
     public void setValue(int x, int y, Boolean value) {
         this.floor[x][y] = value;
     }
-    
-    //public String[][] getMapDetail
 }
