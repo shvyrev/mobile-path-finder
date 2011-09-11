@@ -26,6 +26,7 @@ public class GPSmodule implements Runnable {
             if(coordinateAvailable){
                 try {
                     p.updatePosition(currentX, currentX);
+                    coordinateAvailable=false;
                 } catch (WalkingDistanceError ex) {
                     System.out.println("Invalied Coordinate input");
                 }
@@ -36,8 +37,11 @@ public class GPSmodule implements Runnable {
     
     
     //have to fill kaja
-    public void updateCurrentPosition(){
-        
+    private  void updateCurrentPosition(){
+        //get current coordinate from bluetooth and update local variables. 
+        synchronized(p){
+        this.coordinateAvailable=true;
+        }
     }
     
   
