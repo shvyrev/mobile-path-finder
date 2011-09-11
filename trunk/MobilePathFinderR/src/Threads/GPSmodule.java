@@ -4,26 +4,31 @@
  */
 package Threads;
 
+import Exceptions.WalkingDistanceError;
+
 /**
  *
  * @author rajeevan
  */
-public class BluetoothReceiver implements Runnable {
+public class GPSmodule implements Runnable {
     
     Person p;
     boolean coordinateAvailable;
     int currentX;
     int currentY;
     
-    public BluetoothReceiver(Person p){
+    public GPSmodule(Person p){
         this.p=p;
     }
 
     public void run() {
         while(true){
             if(coordinateAvailable){
-            p.setCurrentX(currentX);
-            p.setCurrentX(currentY);
+                try {
+                    p.updatePosition(currentX, currentX);
+                } catch (WalkingDistanceError ex) {
+                    System.out.println("Invalied Coordinate input");
+                }
             }
             updateCurrentPosition();
         }

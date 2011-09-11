@@ -13,7 +13,7 @@ import DataStructure.MyComparable;
 public class AStarPathFinder implements PathFinder {
 
     //variables
-    //##########################################################################
+    ///##########################################################################
     private VectorSub closed = new VectorSub();
     private SortedList open = new SortedList();
     private Map map;
@@ -21,10 +21,10 @@ public class AStarPathFinder implements PathFinder {
     private Node[][] nodes;
     private boolean allowDiagMovement = true;
     private HeuristicCost heuristic;
-    //##########################################################################
+    ///##########################################################################
 
     //inner classes 
-    //##########################################################################
+    ///##########################################################################
     private class Node implements MyComparable {
 
         /** The x coordinate of the node */
@@ -157,10 +157,10 @@ public class AStarPathFinder implements PathFinder {
             return list.contains(t);
         }
     }
-    //##########################################################################
+    ///##########################################################################
 
     //constructors
-    //##########################################################################
+    ///##########################################################################
     public AStarPathFinder(Map map, int maxSearchDistance, HeuristicCost heuristic) {
         this.map = map;
         this.maxSearchDistance = maxSearchDistance;
@@ -177,7 +177,7 @@ public class AStarPathFinder implements PathFinder {
     public AStarPathFinder(Map map) {
         this(map, map.getHeight() * map.getWidth(), new DirectHeuristicCost());
     }
-    //##########################################################################
+    ///##########################################################################
 
     /**
      * @return The first element in the open list
@@ -390,4 +390,5 @@ public class AStarPathFinder implements PathFinder {
 
         return path;
     }
+
 }

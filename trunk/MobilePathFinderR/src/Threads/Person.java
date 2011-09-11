@@ -18,6 +18,7 @@ public class Person {
     private double maximumStepDist = 1;
     private double stepDeviationFactor = 0.5;
     private Direction direction;
+    private boolean updated;
 
     //lot of confusion.
     //need forward error correction
@@ -28,6 +29,7 @@ public class Person {
             maximumStepDist = getDistance(x, y);
             currentX = x;
             currentY = y;
+            updated=true;
             return true;
         } else {
             throw new WalkingDistanceError();
@@ -42,7 +44,7 @@ public class Person {
         return currentX;
     }
 
-    public void setCurrentX(int currentX) {
+    private void setCurrentX(int currentX) {
         this.currentX = currentX;
     }
 
@@ -50,7 +52,7 @@ public class Person {
         return currentY;
     }
 
-    public void setCurrentY(int currentY) {
+    private void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
 
