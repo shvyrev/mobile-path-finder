@@ -6,6 +6,7 @@ package Threads;
 
 import Exceptions.WalkingDistanceError;
 import DataStructure.Direction;
+import DataStructure.Path;
 
 /**
  *
@@ -13,16 +14,29 @@ import DataStructure.Direction;
  */
 public class Person {
 
+    //coordinate properties
     private int currentX;
     private int currentY;
+    private Direction direction;
     private int destX;
     private int destY;
-    
+    private Path way = new Path();  //this is used to store the walking history of the person
+    private boolean updated;
+    //properties of person
     private double maximumStepDist = 1;
     private double stepDeviationFactor = 0.5;
-    private Direction direction;
-    private boolean updated;
 
+    //constructor 
+    //input : starting position and destination position
+    public Person(int startX, int startY, int destX, int destY, Direction startingDir) {
+        this.currentX = startX;
+        this.currentY = startY;
+        way.appendStep(startX, startY);
+        this.updated = true;
+        direction = startingDir;
+    }
+
+    //Getterz and Setters
     public boolean isUpdated() {
         return updated;
     }
@@ -35,40 +49,12 @@ public class Person {
         return destY;
     }
 
-    //lot of confusion.
-    //need forward error correction
-    //using maximumStepDist have to update the current Position.
-    //update maximumStepDist dynamically.
-    public  boolean updatePosition(int x, int y) throws WalkingDistanceError {
-        if (getDistance(x, y) <= (maximumStepDist * (1 + stepDeviationFactor))) {
-            maximumStepDist = getDistance(x, y);
-            currentX = x;
-            currentY = y;
-            updated=true;
-            return true;
-        } else {
-            throw new WalkingDistanceError();
-        }
-    }
-
-    private double getDistance(int x, int y) {
-        return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
-    }
-
     public int getCurrentX() {
         return currentX;
     }
 
-    private void setCurrentX(int currentX) {
-        this.currentX = currentX;
-    }
-
     public int getCurrentY() {
         return currentY;
-    }
-
-    private void setCurrentY(int currentY) {
-        this.currentY = currentY;
     }
 
     public Direction getDirection() {
@@ -87,11 +73,34 @@ public class Person {
         this.maximumStepDist = maximumStepDist;
     }
 
-    public double getStepDeviationFactor() {
-        return stepDeviationFactor;
-    }
-
     public void setStepDeviationFactor(double stepDeviationFactor) {
         this.stepDeviationFactor = stepDeviationFactor;
+    }
+
+    ///#################################################################################
+    //lot of confusion.
+    //need forward error correction
+    //using maximumStepDist have to update the current Position.
+    //update maximumStepDist dynamically.
+    public boolean updatePosition(int x, int y) throws WalkingDistanceError {
+        synchronized (this) {
+            if (getDistance(x, y) <= (maximumStepDist * (1 + stepDeviationFactor))) {
+                maximumStepDist = getDistance(x, y);
+                direction = Direction.getDirection(currentX, currentY, x, y);
+
+                //only update currentX, currentY after update the direction
+                currentX = x;
+                currentY = y;
+                this.way.appendStep(x, y);
+                updated = true;
+                return true;
+            } else {
+                throw new WalkingDistanceError();
+            }
+        }
+    }
+
+    private double getDistance(int x, int y) {
+        return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
     }
 }
