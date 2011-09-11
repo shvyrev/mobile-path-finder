@@ -16,7 +16,7 @@ public class AStarPathFinder implements PathFinder {
     ///##########################################################################
     private VectorSub closed = new VectorSub();
     private SortedList open = new SortedList();
-    private Map map;
+    //private Map map;
     private int maxSearchDistance;
     private Node[][] nodes;
     private boolean allowDiagMovement = true;
@@ -162,7 +162,7 @@ public class AStarPathFinder implements PathFinder {
     //constructors
     ///##########################################################################
     public AStarPathFinder(Map map, int maxSearchDistance, HeuristicCost heuristic) {
-        this.map = map;
+        //this.map = map;
         this.maxSearchDistance = maxSearchDistance;
         this.heuristic = heuristic;
 
@@ -232,7 +232,7 @@ public class AStarPathFinder implements PathFinder {
     /**
      * Check if a given location is valid for the supplied mover
      */
-    private boolean isValidLocation(int sx, int sy, int x, int y) {
+    private boolean isValidLocation(int sx, int sy, int x, int y,Map map) {
 
         boolean invalid = (x < 0) || (y < 0) || (x >= map.getWidth()) || (y >= map.getHeight());
 
@@ -266,7 +266,7 @@ public class AStarPathFinder implements PathFinder {
         return heuristic.getCost(x, y, tx, ty);
     }
 
-    public Path findPath(int sx, int sy, int tx, int ty) {
+    public Path findPath(int sx, int sy, int tx, int ty,Map map) {
         // first check, if the destination is blocked, we can't get there
         if (map.isBlocked(tx, ty).booleanValue()) {
             return null;
@@ -323,7 +323,7 @@ public class AStarPathFinder implements PathFinder {
                     int xp = x + current.x;
                     int yp = y + current.y;
 
-                    if (isValidLocation(sx, sy, xp, yp)) {
+                    if (isValidLocation(sx, sy, xp, yp,map)) {
 
                         // the cost to get to this node is cost the current plus the movement
                         // cost to reach this node. 

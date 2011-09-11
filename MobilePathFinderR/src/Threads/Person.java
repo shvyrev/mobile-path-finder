@@ -15,16 +15,31 @@ public class Person {
 
     private int currentX;
     private int currentY;
+    private int destX;
+    private int destY;
+    
     private double maximumStepDist = 1;
     private double stepDeviationFactor = 0.5;
     private Direction direction;
     private boolean updated;
 
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public int getDestX() {
+        return destX;
+    }
+
+    public int getDestY() {
+        return destY;
+    }
+
     //lot of confusion.
     //need forward error correction
     //using maximumStepDist have to update the current Position.
     //update maximumStepDist dynamically.
-    public synchronized boolean updatePosition(int x, int y) throws WalkingDistanceError {
+    public  boolean updatePosition(int x, int y) throws WalkingDistanceError {
         if (getDistance(x, y) <= (maximumStepDist * (1 + stepDeviationFactor))) {
             maximumStepDist = getDistance(x, y);
             currentX = x;

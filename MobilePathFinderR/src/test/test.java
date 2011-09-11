@@ -20,7 +20,7 @@ public class test {
         Map m=RandomMapGen.randomMap(10, 10);
 
         frm.append(m.toString());
-        Path p=new AStarPathFinder(m).findPath(0, 0, 9, 9);
+        Path p=new AStarPathFinder(m).findPath(0, 0, 9, 9,m);
 
         frm.append("\nThe navigation Path:\n");
 
