@@ -23,7 +23,7 @@ public class Person {
     private Path way = new Path();  //this is used to store the walking history of the person
     private boolean updated;
     //properties of person
-    private double maximumStepDist = 1;
+    private double maximumStepDist = 1.5;
     private double stepDeviationFactor = 0.5;
 
     //constructor 
@@ -78,14 +78,15 @@ public class Person {
     }
 
     ///#################################################################################
-    //lot of confusion.
-    //need forward error correction
-    //using maximumStepDist have to update the current Position.
-    //update maximumStepDist dynamically.
     public boolean updatePosition(int x, int y) throws WalkingDistanceError {
         synchronized (this) {
-            if (getDistance(x, y) <= (maximumStepDist * (1 + stepDeviationFactor))) {
-                maximumStepDist = getDistance(x, y);
+            double distance = getDistance(x, y);
+            System.out.println("x=" + x + " y=" + y + " distance=" + distance);
+
+
+            if (distance <= (maximumStepDist * (1 + stepDeviationFactor))) {
+                maximumStepDist = distance;
+
                 direction = Direction.getDirection(currentX, currentY, x, y);
 
                 //only update currentX, currentY after update the direction
@@ -93,6 +94,7 @@ public class Person {
                 currentY = y;
                 this.way.appendStep(x, y);
                 updated = true;
+                System.out.println(this);
                 return true;
             } else {
                 throw new WalkingDistanceError();
@@ -101,6 +103,12 @@ public class Person {
     }
 
     private double getDistance(int x, int y) {
+        synchronized(this){
         return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
+        }
+    }
+
+    public String toString() {
+        return "X=" + currentX + " Y=" + currentY + " Dir=" + direction;
     }
 }
