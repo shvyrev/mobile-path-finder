@@ -5,45 +5,40 @@
 package Threads;
 
 import Exceptions.WalkingDistanceError;
+import test.CordinateServer;
 
 /**
  *
  * @author rajeevan
  */
 public class GPSmodule implements Runnable {
-    
+
+    CordinateServer server;
     Person p;
-    boolean coordinateAvailable;
-    int currentX;
-    int currentY;
-    
-    public GPSmodule(Person p){
-        this.p=p;
+
+    public GPSmodule(Person p, CordinateServer c) {
+        this.server = c;
+        this.p = p;
     }
 
     public void run() {
-        while(true){
-            if(coordinateAvailable){
-                try {
-                    p.updatePosition(currentX, currentX);
-                    coordinateAvailable=false;
-                } catch (WalkingDistanceError ex) {
-                    System.out.println("Invalied Coordinate input");
+        while (true) {
+            if (server.hasUpdate()) {
+                System.out.println("serverhas update");
+                synchronized (p) {
+                    /*try {
+                        Thread.currentThread().sleep(5000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }*/
+                    int[] coordinate = server.getCoordinate();
+                    System.out.println(coordinate[0]+" "+coordinate[1]);
+                    try {
+                        p.updatePosition(coordinate[0], coordinate[1]);
+                    } catch (WalkingDistanceError ex) {
+                    }
                 }
             }
-            updateCurrentPosition();
         }
     }
-    
-    
-    //have to fill kaja
-    private  void updateCurrentPosition(){
-        //get current coordinate from bluetooth and update local variables. 
-        synchronized(p){
-        this.coordinateAvailable=true;
-        }
-    }
-    
-  
-    
 }

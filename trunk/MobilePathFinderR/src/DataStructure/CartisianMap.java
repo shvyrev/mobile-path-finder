@@ -54,7 +54,11 @@ public class CartisianMap implements Map {
     }
 
     public Boolean isBlocked(int x, int y) {
-        return floor[x][y].booleanValue() ? Boolean.FALSE : Boolean.TRUE;
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            return floor[x][y].booleanValue() ? Boolean.FALSE : Boolean.TRUE;
+        } else {
+            return Boolean.TRUE;
+        }
     }
 
     public void setMap(Boolean[][] floor) {

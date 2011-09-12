@@ -26,8 +26,10 @@ public class PathProcessor implements Runnable {
     }
     
     
-    private synchronized void updatePath(){
+    private  void updatePath(){
+        synchronized(p){
         pathFinder.findPath(p.getCurrentX(), p.getCurrentY(), p.getDestX(), p.getDestY(),m);
+        }
     }
     
 }

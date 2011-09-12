@@ -9,9 +9,10 @@ import java.util.Vector;
 public class Path {
 
     private Vector steps = new Vector();
+    
 
     public class Step {
-
+        
         /** The x coordinate at the given step */
         private int x;
         /** The y coordinate at the given step */
@@ -29,7 +30,9 @@ public class Path {
          * @return The x coordinate of the new step
          */
         public int getX() {
+            
             return x;
+            
         }
 
         /**
