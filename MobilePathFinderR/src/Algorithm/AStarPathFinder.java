@@ -1,5 +1,6 @@
 package Algorithm;
 
+import Components.MapLib;
 import DataStructure.Collections;
 import DataStructure.Path;
 import DataStructure.Map;
@@ -17,6 +18,7 @@ public class AStarPathFinder implements PathFinder {
     private VectorSub closed = new VectorSub();
     private SortedList open = new SortedList();
     private int maxSearchDistance;
+    Map map;
     private Node[][] nodes;
     private boolean allowDiagMovement = true;
     private HeuristicCost heuristic;
@@ -160,11 +162,11 @@ public class AStarPathFinder implements PathFinder {
 
     //constructors
     ///##########################################################################
-    public AStarPathFinder(Map map, int maxSearchDistance, HeuristicCost heuristic) {
-        //this.map = map;
+    public AStarPathFinder(int maxSearchDistance, HeuristicCost heuristic) {
+        this.map = MapLib.map;
         this.maxSearchDistance = maxSearchDistance;
         this.heuristic = heuristic;
-
+        
         nodes = new Node[map.getWidth()][map.getHeight()];
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
@@ -172,10 +174,10 @@ public class AStarPathFinder implements PathFinder {
             }
         }
     }
-
-    public AStarPathFinder(Map map) {
-        this(map, map.getHeight() * map.getWidth(), new DirectHeuristicCost());
+    public AStarPathFinder(){
+        this(MapLib.map.getHeight()*MapLib.map.getWidth(),new DirectHeuristicCost());
     }
+
     ///##########################################################################
 
     /**
@@ -267,7 +269,7 @@ public class AStarPathFinder implements PathFinder {
 
     //this is the actual implementation of A* path finding algorithm
     
-    public Path findPath(int sx, int sy, int tx, int ty,Map map) {
+    public Path findPath(int sx, int sy, int tx, int ty) {
         // first check, if the destination is blocked, we can't get there
         if (map.isBlocked(tx, ty).booleanValue()) {
             return null;

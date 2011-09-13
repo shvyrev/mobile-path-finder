@@ -26,11 +26,7 @@ public class GPSmodule implements Runnable {
             if (server.hasUpdate()) {
                 System.out.println("serverhas update");
                 synchronized (p) {
-                    /*try {
-                        Thread.currentThread().sleep(5000);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }*/
+
                     int[] coordinate = server.getCoordinate();
                     System.out.println(coordinate[0]+" "+coordinate[1]);
                     try {

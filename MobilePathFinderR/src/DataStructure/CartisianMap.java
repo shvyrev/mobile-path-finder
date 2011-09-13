@@ -73,9 +73,9 @@ public class CartisianMap implements Map {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 if (!path.contains(x, y)) {
-                    s += floor[x][y].booleanValue() ? "_" : "x";
+                    s += floor[x][y].booleanValue() ? "+" : "x";
                 } else {
-                    s += "o";
+                    s += "$";
                 }
             }
             s += "\n";
