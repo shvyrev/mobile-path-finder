@@ -8,6 +8,7 @@ package test;
  *
  * @author rajeevan
  */
+import Components.MapLib;
 import DataStructure.Map;
 import java.util.Random;
 
@@ -17,17 +18,27 @@ public class CordinateServer implements Runnable {
     int currentX, currentY;
     boolean updated;
     
-    public CordinateServer(int x, int y, Map m) {
+    public CordinateServer(int x, int y) {
+        
         this.currentX = x;
         this.currentY = y;
-        this.m = m;
+        this.m = MapLib.map;
     }
 
     public void run() {
         Random r = new Random(System.currentTimeMillis());
+        Random s= new Random(System.currentTimeMillis());
         while (true) {
-            int x = (r.nextInt(3)-1) ;
-            int y = (r.nextInt(3)-1) ;
+            int a=s.nextInt(100);
+            int x,y;
+            if(a<=85){
+                x = (r.nextInt(2)) ;
+                y = (r.nextInt(2)) ;
+            }else{
+                x=(r.nextInt(2)-1);
+                y=(r.nextInt(2)-1);
+            }
+            
             if(x==0&& y==0){
                 continue;
             }

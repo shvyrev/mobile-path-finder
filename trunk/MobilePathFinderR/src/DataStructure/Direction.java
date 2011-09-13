@@ -20,7 +20,6 @@ public class Direction {
     public final static Direction EAST = new Direction(6);
     public final static Direction NORTHEAST = new Direction(7);
 
-    
     public final static double piBy4=1;
     public final static double piBy8=0.41421;
     public final static double TpiBy8=2.4142;

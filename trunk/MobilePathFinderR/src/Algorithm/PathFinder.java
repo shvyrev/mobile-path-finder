@@ -16,6 +16,6 @@ import DataStructure.Path;
  */
 public interface PathFinder {
     
-    public Path findPath(int sx,int sy,int ex,int ey,Map m);
+    public Path findPath(int sx,int sy,int ex,int ey);
     
 }

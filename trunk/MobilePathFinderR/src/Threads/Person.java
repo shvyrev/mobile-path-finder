@@ -4,8 +4,10 @@
  */
 package Threads;
 
+import Components.MapLib;
 import Exceptions.WalkingDistanceError;
 import DataStructure.Direction;
+import DataStructure.Map;
 import DataStructure.Path;
 
 /**
@@ -22,6 +24,7 @@ public class Person {
     private int destY;
     private Path way = new Path();  //this is used to store the walking history of the person
     private boolean updated;
+    private Map map;
     //properties of person
     private double maximumStepDist = 1.5;
     private double stepDeviationFactor = 0.5;
@@ -31,9 +34,12 @@ public class Person {
     public Person(int startX, int startY, int destX, int destY, Direction startingDir) {
         this.currentX = startX;
         this.currentY = startY;
+        this.destX=destX;
+        this.destY=destY;
         way.appendStep(startX, startY);
         this.updated = true;
         direction = startingDir;
+        this.map = MapLib.map;
     }
 
     //Getterz and Setters
@@ -81,15 +87,9 @@ public class Person {
     public boolean updatePosition(int x, int y) throws WalkingDistanceError {
         synchronized (this) {
             double distance = getDistance(x, y);
-            System.out.println("x=" + x + " y=" + y + " distance=" + distance);
-
-
-            if (distance <= (maximumStepDist * (1 + stepDeviationFactor))) {
+            if ((distance <= (maximumStepDist * (1 + stepDeviationFactor))) && !map.isBlocked(x, y).booleanValue()) {
                 maximumStepDist = distance;
-
                 direction = Direction.getDirection(currentX, currentY, x, y);
-
-                //only update currentX, currentY after update the direction
                 currentX = x;
                 currentY = y;
                 this.way.appendStep(x, y);
@@ -103,12 +103,34 @@ public class Person {
     }
 
     private double getDistance(int x, int y) {
-        synchronized(this){
-        return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
+        synchronized (this) {
+            return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
         }
+    }
+    
+    public void setUsed(){
+        this.updated=false;
     }
 
     public String toString() {
-        return "X=" + currentX + " Y=" + currentY + " Dir=" + direction;
+        String s = "dir="+this.direction+"\n";
+        if (way == null) {
+            s += "No Path Available!";
+        }
+        for (int y = map.getHeight() - 1; y >= 0; y--) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                if(x==currentX&&y==currentY){
+                    s+="#";
+                    
+                }else if (!way.contains(x,y)) {
+                    s += map.getFloorPlan()[x][y].booleanValue() ? "+" : "x";
+                } else {
+                    s += "o";
+                }
+            }
+            s += "\n";
+        }
+
+        return s;
     }
 }

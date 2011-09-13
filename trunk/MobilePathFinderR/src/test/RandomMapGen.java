@@ -20,8 +20,8 @@ public class RandomMapGen{
         
         for(int x=0;x<b.length;x++){
             for(int y=0;y<b[0].length;y++){
-                int nxtInt=r.nextInt();
-                b[x][y]=(nxtInt%2==0||nxtInt%3==0)?Boolean.TRUE:Boolean.TRUE;
+                int nxtInt=r.nextInt(100);
+                b[x][y]=(nxtInt<=75)?Boolean.TRUE:Boolean.FALSE;
                 
             }
         }
