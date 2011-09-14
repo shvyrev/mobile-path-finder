@@ -27,4 +27,6 @@ public interface Map {
     public Boolean getValue(int x,int y);
     
     public void setValue(int x,int y,Boolean value);
+    
+    public Direction pathStartingDirection(int currentX,int currentY);
 }

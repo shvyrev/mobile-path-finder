@@ -4,6 +4,8 @@
  */
 package test;
 
+import test.utils.RandomMapGen;
+import test.utils.CordinateServer;
 import Algorithm.AStarPathFinder;
 import Algorithm.PathFinder;
 import Components.MapLib;
@@ -11,7 +13,7 @@ import DataStructure.Direction;
 import DataStructure.Map;
 import Threads.GPSmodule;
 import Threads.PathProcessor;
-import Threads.Person;
+import Components.Person;
 import javax.microedition.lcdui.Form;
 
 /**

@@ -4,8 +4,9 @@
  */
 package Threads;
 
+import Components.Person;
 import Exceptions.WalkingDistanceError;
-import test.CordinateServer;
+import test.utils.CordinateServer;
 
 /**
  *
@@ -24,11 +25,11 @@ public class GPSmodule implements Runnable {
     public void run() {
         while (true) {
             if (server.hasUpdate()) {
-                System.out.println("serverhas update");
+                //System.out.println("serverhas update");
                 synchronized (p) {
 
                     int[] coordinate = server.getCoordinate();
-                    System.out.println(coordinate[0]+" "+coordinate[1]);
+                    //System.out.println(coordinate[0]+" "+coordinate[1]);
                     try {
                         p.updatePosition(coordinate[0], coordinate[1]);
                     } catch (WalkingDistanceError ex) {

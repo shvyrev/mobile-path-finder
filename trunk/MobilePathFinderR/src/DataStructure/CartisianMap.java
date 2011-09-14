@@ -103,4 +103,8 @@ public class CartisianMap implements Map {
     public void setValue(int x, int y, Boolean value) {
         this.floor[x][y] = value;
     }
+
+    public Direction pathStartingDirection(int currentX,int currentY) {
+        return Direction.getDirection(currentX,currentY,path.getLastX(),path.getLastY());
+    }
 }

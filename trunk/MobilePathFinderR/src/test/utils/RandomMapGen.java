@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
+package test.utils;
 
 import DataStructure.CartisianMap;
 import DataStructure.Map;
