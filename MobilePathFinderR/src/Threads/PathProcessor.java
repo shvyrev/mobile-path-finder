@@ -4,6 +4,7 @@
  */
 package Threads;
 
+import Components.Person;
 import Algorithm.PathFinder;
 import Components.MapLib;
 import DataStructure.Map;
@@ -42,7 +43,7 @@ public class PathProcessor implements Runnable {
     private  void updatePath(){
         synchronized(p){
         pathFinder.findPath(p.getCurrentX(),p.getCurrentY(), DestX,DestY);
-            System.out.println(this.m);
+        //System.out.println(this.m);
         }
     }
 }

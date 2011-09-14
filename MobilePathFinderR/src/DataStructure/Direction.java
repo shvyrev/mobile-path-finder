@@ -11,6 +11,7 @@ package DataStructure;
 public class Direction {
 
     private int currentDirection;
+    
     public final static Direction NORTH = new Direction(0);
     public final static Direction NORTHWEST = new Direction(1);
     public final static Direction WEST = new Direction(2);
@@ -19,11 +20,11 @@ public class Direction {
     public final static Direction SOUTHEAST = new Direction(5);
     public final static Direction EAST = new Direction(6);
     public final static Direction NORTHEAST = new Direction(7);
-
-    public final static double piBy4=1;
-    public final static double piBy8=0.41421;
-    public final static double TpiBy8=2.4142;
     
+    private final static double piBy4 = 1;
+    private final static double piBy8 = 0.41421;
+    private final static double TpiBy8 = 2.4142;
+
     public Direction(int value) {
         this.currentDirection = value;
     }
@@ -47,13 +48,13 @@ public class Direction {
     }
 
     public static Direction getDirection(int startX, int startY, int endX, int endY) {
-float m;
-        if(endX!=startX){
-        m = ((endY - startY) / (endX - startX));
-        }else{
-            m=5;
+        float m;
+        if (endX != startX) {
+            m = ((endY - startY) / (endX - startX));
+        } else {
+            m = 5;
         }
-        if (m >= -piBy8 && m <piBy8) {
+        if (m >= -piBy8 && m < piBy8) {
             //EAST && WEST
             if (endX >= startX) {
                 return Direction.EAST;
@@ -88,8 +89,6 @@ float m;
     }
 
     public String toString() {
-
-
         switch (currentDirection) {
             case 0:
                 return "NORTH";

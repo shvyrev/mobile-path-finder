@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
+package test.utils;
 
 /**
  *
@@ -46,7 +46,7 @@ public class CordinateServer implements Runnable {
                 currentX+=x;
                 currentY+=y;
                 updated=true;
-                System.out.println("Message:"+currentX+" "+currentY+" "+Thread.currentThread());
+                //System.out.println("Message:"+currentX+" "+currentY+" "+Thread.currentThread());
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException ex) {

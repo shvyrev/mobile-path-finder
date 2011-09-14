@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Components;
 
-import Components.MapLib;
 import Exceptions.WalkingDistanceError;
 import DataStructure.Direction;
 import DataStructure.Map;
@@ -83,7 +82,6 @@ public class Person {
         this.stepDeviationFactor = stepDeviationFactor;
     }
 
-    ///#################################################################################
     public boolean updatePosition(int x, int y) throws WalkingDistanceError {
         synchronized (this) {
             double distance = getDistance(x, y);
