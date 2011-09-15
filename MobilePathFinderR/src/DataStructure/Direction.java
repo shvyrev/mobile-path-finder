@@ -12,14 +12,14 @@ public class Direction {
 
     private int currentDirection;
     
-    public final static Direction NORTH = new Direction(0);
-    public final static Direction NORTHWEST = new Direction(1);
-    public final static Direction WEST = new Direction(2);
-    public final static Direction SOUTHWEST = new Direction(3);
-    public final static Direction SOUTH = new Direction(4);
-    public final static Direction SOUTHEAST = new Direction(5);
-    public final static Direction EAST = new Direction(6);
-    public final static Direction NORTHEAST = new Direction(7);
+    public final static Direction d_0 = new Direction(0);
+    public final static Direction d_45 = new Direction(1);
+    public final static Direction d_90 = new Direction(2);
+    public final static Direction d_135 = new Direction(3);
+    public final static Direction d_180 = new Direction(4);
+    public final static Direction d_225 = new Direction(5);
+    public final static Direction d_270 = new Direction(6);
+    public final static Direction d_315 = new Direction(7);
     
     private final static double piBy4 = 1;
     private final static double piBy8 = 0.41421;
@@ -55,57 +55,70 @@ public class Direction {
             m = 5;
         }
         if (m >= -piBy8 && m < piBy8) {
-            //EAST && WEST
+            
             if (endX >= startX) {
-                return Direction.EAST;
+                return Direction.d_0;
             } else {
-                return Direction.WEST;
+                return Direction.d_180;
             }
 
         } else if (m >= piBy8 && m < TpiBy8) {
             //NORTHEAST && SOUTHWEST
             if (endX >= startX) {
-                return Direction.NORTHEAST;
+                return Direction.d_45;
             } else {
-                return Direction.SOUTHWEST;
+                return Direction.d_225;
             }
         } else if (m >= TpiBy8 || m <= -TpiBy8) {
             //NORTH && SOUTH
             if (endY >= startY) {
-                return Direction.NORTH;
+                return Direction.d_90;
             } else {
-                return Direction.SOUTH;
+                return Direction.d_270;
             }
         } else {
             //NORTHWEST && SOUTHEAST
             if (endX >= startX) {
-                return Direction.SOUTHEAST;
+                return Direction.d_315;
             } else {
-                return Direction.NORTHWEST;
+                return Direction.d_135;
             }
         }
 
 
     }
+    
+    public static Direction getDirection(Direction start,Direction end){
+        int stdir=start.getCurrentDirection();
+        int enddir=end.getCurrentDirection();
+        
+        int diff=enddir-stdir;
+        diff=diff<0?(8+diff):diff;
+        
+        return new Direction(diff);
+        
+        
+        
+    }
 
     public String toString() {
         switch (currentDirection) {
             case 0:
-                return "NORTH";
+                return "0d";
             case 1:
-                return "NORTHWEST";
+                return "45d";
             case 2:
-                return "WEST";
+                return "90d";
             case 3:
-                return "SOUTHWEST";
+                return "135d";
             case 4:
-                return "SOUTH";
+                return "180d";
             case 5:
-                return "SOUTHEAST";
+                return "225d";
             case 6:
-                return "EAST";
+                return "270d";
             case 7:
-                return "NORTHEAST";
+                return "315d";
         }
         return "no Direction";
     }

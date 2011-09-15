@@ -23,19 +23,29 @@ public class GPSmodule implements Runnable {
     }
 
     public void run() {
+        int count=0;
         while (true) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
             if (server.hasUpdate()) {
                 //System.out.println("serverhas update");
                 synchronized (p) {
-
+                    
                     int[] coordinate = server.getCoordinate();
-                    //System.out.println(coordinate[0]+" "+coordinate[1]);
+                    System.out.println();
                     try {
+                        System.out.println("GPS: "+count+" start to update");
                         p.updatePosition(coordinate[0], coordinate[1]);
+                        System.out.println("GPS: "+count+" Person updated "+coordinate[0]+" "+coordinate[1]);
                     } catch (WalkingDistanceError ex) {
                     }
+                    count++;
                 }
             }
+            
         }
     }
 }

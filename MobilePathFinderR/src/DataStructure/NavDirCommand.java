@@ -12,9 +12,10 @@ public class NavDirCommand {
 
     private int direction = 0;
 
-    public NavDirCommand(int direction){
-        this.direction=direction;
+    public NavDirCommand(int direction) {
+        this.direction = direction;
     }
+
     public int getDirection() {
         return direction;
     }
@@ -45,5 +46,21 @@ public class NavDirCommand {
                 return "BACK";
         }
         return "STOP";
+    }
+
+    public static NavDirCommand convertDirection(Direction d) {
+        switch (d.getCurrentDirection()) {
+            case 0:
+                return NavDirCommand.STRIGHT;
+            case 1:
+                return NavDirCommand.LLEFT;
+            case 2:
+                return NavDirCommand.LEFT;
+            case 7:
+                return NavDirCommand.RRIGHT;
+            case 6:
+                return NavDirCommand.RRIGHT;
+        }
+        return NavDirCommand.BACK;
     }
 }

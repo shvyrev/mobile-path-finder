@@ -104,7 +104,7 @@ public class CartisianMap implements Map {
         this.floor[x][y] = value;
     }
 
-    public Direction pathStartingDirection(int currentX,int currentY) {
-        return Direction.getDirection(currentX,currentY,path.getLastX(),path.getLastY());
+    public Direction pathStartingDirection() {
+        return path.getStartingDirection();
     }
 }

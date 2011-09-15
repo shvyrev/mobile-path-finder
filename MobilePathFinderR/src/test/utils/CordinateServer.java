@@ -28,6 +28,8 @@ public class CordinateServer implements Runnable {
     public void run() {
         Random r = new Random(System.currentTimeMillis());
         Random s= new Random(System.currentTimeMillis());
+        
+        int count=0;
         while (true) {
             int a=s.nextInt(100);
             int x,y;
@@ -46,15 +48,16 @@ public class CordinateServer implements Runnable {
                 currentX+=x;
                 currentY+=y;
                 updated=true;
-                //System.out.println("Message:"+currentX+" "+currentY+" "+Thread.currentThread());
+                
                 try {
+                    System.out.println("CordinateServer "+count+ " x="+currentX+" y="+currentY);
                     Thread.sleep(3000);
                 } catch (InterruptedException ex) {
                     System.out.println("Waken up");
                 }
             }
             
-
+         count++;
         }
 
     }

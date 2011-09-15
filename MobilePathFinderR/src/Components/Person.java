@@ -92,7 +92,9 @@ public class Person {
                 currentY = y;
                 this.way.appendStep(x, y);
                 updated = true;
-                System.out.println(this);
+                System.out.println("Person: direction "+direction+" "+x+" "+y);
+                //System.out.println(this);
+                System.out.println("Person: updated");
                 return true;
             } else {
                 throw new WalkingDistanceError();
@@ -111,15 +113,14 @@ public class Person {
     }
 
     public String toString() {
-        String s = "dir="+this.direction+"\n";
-        if (way == null) {
-            s += "No Path Available!";
-        }
+        String s = "";
         for (int y = map.getHeight() - 1; y >= 0; y--) {
             for (int x = 0; x < map.getWidth(); x++) {
-                if(x==currentX&&y==currentY){
-                    s+="#";
-                    
+               // if(x==currentX&&y==currentY){
+                //    s+="#";
+                //} 
+            if(map.getPath().contains(x, y)){
+                    s+="$";
                 }else if (!way.contains(x,y)) {
                     s += map.getFloorPlan()[x][y].booleanValue() ? "+" : "x";
                 } else {

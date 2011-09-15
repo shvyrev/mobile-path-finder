@@ -14,6 +14,7 @@ import DataStructure.Map;
 import Threads.GPSmodule;
 import Threads.PathProcessor;
 import Components.Person;
+import Threads.Navigator;
 import javax.microedition.lcdui.Form;
 
 /**
@@ -28,7 +29,7 @@ public class test {
         frm.append("\nThe Floor:\n");
 
 
-        Map m = RandomMapGen.randomMap(10, 10);
+        Map m = RandomMapGen.randomMap(15, 15);
         frm.append(m.toString());
         MapLib.map = m;
 
@@ -37,7 +38,7 @@ public class test {
         Coordinateserver.start();
 
 
-        Person p = new Person(0, 0, 9, 9, Direction.NORTHEAST);
+        Person p = new Person(0, 0, 14, 14, Direction.d_315);
         GPSmodule gps = new GPSmodule(p, c);
         Thread GPS = new Thread(gps, "gpsmodule");
         GPS.start();
@@ -46,8 +47,13 @@ public class test {
         PathProcessor pathprocess = new PathProcessor(p, pf);
         Thread pathProcessThread = new Thread(pathprocess, "pathprocessor");
         pathProcessThread.start();
+        
+        Navigator nav=new Navigator(p);
+        Thread navThread=new Thread(nav);
+        navThread.start();
+        
 
-        frm.append("\nThe navigation Path:\n");
+        /*frm.append("\nThe navigation Path:\n");
         while (true) {
             try {
                 frm.deleteAll();
@@ -57,6 +63,6 @@ public class test {
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        }
+        }*/
     }
 }

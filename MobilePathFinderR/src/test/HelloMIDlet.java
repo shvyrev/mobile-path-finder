@@ -6,6 +6,7 @@ package test;
 
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import test.unit.DirectionTest;
 
 /**
  * @author rajeevan
@@ -172,7 +173,7 @@ return stringItem;
         } else {
             initialize();
             startMIDlet();
-            test.run(this.form);
+           test.run(this.form);
         }
         midletPaused = false;
     }
