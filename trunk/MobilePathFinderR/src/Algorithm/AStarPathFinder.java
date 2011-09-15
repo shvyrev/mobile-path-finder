@@ -389,6 +389,7 @@ public class AStarPathFinder implements PathFinder {
         }
         path.prependStep(sx, sy);
         map.setPath(path);
+        //System.out.println("path is "+path);
         // thats it, we have our path
 
         return path;

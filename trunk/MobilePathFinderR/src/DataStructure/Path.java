@@ -122,4 +122,24 @@ public class Path {
         Step lastElement=(Step)steps.lastElement();
         return getX(lastElement.y);
     }
+    
+    public Direction getStartingDirection(){
+        Direction d=new Direction(0);
+        try{
+            Step s=(Step)steps.elementAt(0);
+            int startX=s.x;
+            int startY=s.y;
+            s=(Step)steps.elementAt(1);
+            int endX=s.x;
+            int endY=s.y;
+             d=Direction.getDirection(startX, startY, endX, endY);
+            
+        }catch(NullPointerException e){
+            System.out.println("null pointer exception at Path");
+            System.out.println(e);
+        }
+        return d;
+        
+    }
+    
 }

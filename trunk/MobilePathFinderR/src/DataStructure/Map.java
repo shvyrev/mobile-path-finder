@@ -28,5 +28,5 @@ public interface Map {
     
     public void setValue(int x,int y,Boolean value);
     
-    public Direction pathStartingDirection(int currentX,int currentY);
+    public Direction pathStartingDirection();
 }
