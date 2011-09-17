@@ -33,23 +33,34 @@ public class PathProcessor implements Runnable {
     public void run() {
         int count=0;
         while (true) {
+            synchronized(p){
+            try {
+                p.wait();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            
+            
             if (p.isUpdated()) {
+                
                 this.updatePath();
                 p.setUsed();
+                }
+            
+            }
                 System.out.println("PathProcessor "+count+" Path updated" );
                 //System.out.println(m);
                 synchronized (m) {
                     m.notify();
                 }
-            }
+           
             count++;
         }
     }
 
     private void updatePath() {
-        synchronized (p) {
+        
             pathFinder.findPath(p.getCurrentX(), p.getCurrentY(), DestX, DestY);
-            //System.out.println(this.m);
-        }
+       
     }
 }

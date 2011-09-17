@@ -33,8 +33,8 @@ public class Person {
     public Person(int startX, int startY, int destX, int destY, Direction startingDir) {
         this.currentX = startX;
         this.currentY = startY;
-        this.destX=destX;
-        this.destY=destY;
+        this.destX = destX;
+        this.destY = destY;
         way.appendStep(startX, startY);
         this.updated = true;
         direction = startingDir;
@@ -92,7 +92,7 @@ public class Person {
                 currentY = y;
                 this.way.appendStep(x, y);
                 updated = true;
-                System.out.println("Person: direction "+direction+" "+x+" "+y);
+                System.out.println("Person: direction " + direction + " " + x + " " + y);
                 //System.out.println(this);
                 System.out.println("Person: updated");
                 return true;
@@ -107,24 +107,21 @@ public class Person {
             return Math.sqrt((x - currentX) * (x - currentX) + (y - currentY) * (y - currentY));
         }
     }
-    
-    public void setUsed(){
-        this.updated=false;
+
+    public void setUsed() {
+        this.updated = false;
     }
 
     public String toString() {
         String s = "";
         for (int y = map.getHeight() - 1; y >= 0; y--) {
             for (int x = 0; x < map.getWidth(); x++) {
-               // if(x==currentX&&y==currentY){
-                //    s+="#";
-                //} 
-            if(map.getPath().contains(x, y)){
-                    s+="$";
-                }else if (!way.contains(x,y)) {
-                    s += map.getFloorPlan()[x][y].booleanValue() ? "+" : "x";
+                if (map.getPath().contains(x, y)) {
+                    s += "e";
+                } else if (!way.contains(x, y)) {
+                    s += map.getFloorPlan()[x][y].booleanValue() ? "_" : "o";
                 } else {
-                    s += "o";
+                    s += "x";
                 }
             }
             s += "\n";

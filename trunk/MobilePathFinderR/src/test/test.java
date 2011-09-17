@@ -53,16 +53,16 @@ public class test {
         navThread.start();
         
 
-        /*frm.append("\nThe navigation Path:\n");
+        frm.append("\nThe navigation Path:\n");
         while (true) {
             try {
                 frm.deleteAll();
-                frm.append(m.toString());
                 frm.append(p.toString());
+                frm.append(nav.getNavDir().toString());
                 Thread.currentThread().sleep(3000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        }*/
+        }
     }
 }

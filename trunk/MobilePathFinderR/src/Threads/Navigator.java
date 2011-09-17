@@ -50,10 +50,10 @@ public class Navigator implements Runnable{
         Direction currentDirection=p.getDirection();
         System.out.println("current person dir:="+currentDirection);
         Direction pathDirection=m.pathStartingDirection();
-            System.out.println("current path starting dir:="+pathDirection);
+        System.out.println("current path starting dir:="+pathDirection);
         Direction difference=Direction.getDirection(currentDirection, pathDirection);
         navDir=NavDirCommand.convertDirection(difference);
-        
+        ///play the sound of navigation command
         System.out.println(navDir);
         
         }

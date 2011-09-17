@@ -39,6 +39,7 @@ public class GPSmodule implements Runnable {
                     try {
                         System.out.println("GPS: "+count+" start to update");
                         p.updatePosition(coordinate[0], coordinate[1]);
+                        p.notify();
                         System.out.println("GPS: "+count+" Person updated "+coordinate[0]+" "+coordinate[1]);
                     } catch (WalkingDistanceError ex) {
                     }
