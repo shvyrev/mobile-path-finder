@@ -33,7 +33,7 @@ public class CordinateServer implements Runnable {
         while (true) {
             int a=s.nextInt(100);
             int x,y;
-            if(a<=85){
+            if(a<=60){
                 x = (r.nextInt(2)) ;
                 y = (r.nextInt(2)) ;
             }else{
