@@ -11,6 +11,7 @@ package DataStructure;
 public class NavDirCommand {
 
     private int direction = 0;
+    
 
     public NavDirCommand(int direction) {
         this.direction = direction;

@@ -6,6 +6,7 @@ package Threads;
 
 import Components.MapLib;
 import Components.Person;
+import Components.SoundModule;
 import DataStructure.Direction;
 import DataStructure.Map;
 import DataStructure.NavDirCommand;
@@ -18,11 +19,13 @@ import DataStructure.NavDirCommand;
 public class Navigator implements Runnable{
     
     NavDirCommand navDir;
+    SoundModule s;
     Person p;
     Map m;
     
   public Navigator(Person p){
       m=MapLib.map;
+      s=new SoundModule();
       this.p=p;
       navDir=new NavDirCommand(0);
   }
@@ -38,6 +41,7 @@ public class Navigator implements Runnable{
                     System.out.println("NavigatorInterrupted");
                 }
                 updateCommandDirection();
+                
                 System.out.println("Navigator:"+count +"command updated");
             }
         }
@@ -53,7 +57,7 @@ public class Navigator implements Runnable{
         System.out.println("current path starting dir:="+pathDirection);
         Direction difference=Direction.getDirection(currentDirection, pathDirection);
         navDir=NavDirCommand.convertDirection(difference);
-        ///play the sound of navigation command
+        s.play_Sound(navDir);
         System.out.println(navDir);
         
         }
