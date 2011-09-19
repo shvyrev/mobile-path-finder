@@ -51,7 +51,7 @@ public class CordinateServer implements Runnable {
                 
                 try {
                     System.out.println("CordinateServer "+count+ " x="+currentX+" y="+currentY);
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException ex) {
                     System.out.println("Waken up");
                 }

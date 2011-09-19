@@ -8,8 +8,10 @@ import Algorithm.AStarPathFinder;
 import Algorithm.PathFinder;
 import Components.MapLib;
 import Components.Person;
+import Components.SoundModule;
 import DataStructure.Direction;
 import DataStructure.Map;
+import DataStructure.NavDirCommand;
 import Threads.GPSmodule;
 import Threads.Navigator;
 import Threads.PathProcessor;
@@ -224,6 +226,7 @@ public class HelloMIDlet extends MIDlet implements CommandListener ,Runnable {
         Navigator nav=new Navigator(p);
         Thread navThread=new Thread(nav);
         navThread.start();
+        //new SoundModule().play_Sound(NavDirCommand.LEFT);
         while(true){
         this.form.deleteAll();
         this.form.append(p+nav.getNavDir().toString());
