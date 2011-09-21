@@ -11,9 +11,9 @@ import Algorithm.PathFinder;
 import Components.MapLib;
 import DataStructure.Direction;
 import DataStructure.Map;
-import Threads.PathProcessor;
+import Components.PathProcessor;
 import Components.Person;
-import Threads.Navigator;
+import Components.Navigator;
 import javax.microedition.lcdui.Form;
 
 /**

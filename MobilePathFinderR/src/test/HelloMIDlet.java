@@ -6,14 +6,14 @@ package test;
 
 import Algorithm.AStarPathFinder;
 import Algorithm.PathFinder;
+import Components.BluetoothModule;
 import Components.CoordinateServable;
 import Components.Person;
 import DataStructure.Direction;
-import Threads.Navigator;
-import Threads.PathProcessor;
+import Components.Navigator;
+import Components.PathProcessor;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import test.utils.CoordinateServer;
 
 /**
  * @author rajeevan
@@ -206,8 +206,8 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
 
 
         Person p = new Person(0, 0, 34, 11, Direction.d_90);
-        CoordinateServable cs = new CoordinateServer(0, 0,p);
-       // CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false");
+        //CoordinateServable cs = new CoordinateServer(0, 0,p);
+        CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false",p);
         Thread cord = new Thread(cs);
         cord.start();
 
