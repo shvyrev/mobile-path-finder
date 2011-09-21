@@ -6,18 +6,14 @@ package test;
 
 import Algorithm.AStarPathFinder;
 import Algorithm.PathFinder;
-import Components.MapLib;
+import Components.CoordinateServable;
 import Components.Person;
-import Components.SoundModule;
 import DataStructure.Direction;
-import DataStructure.Map;
-import DataStructure.NavDirCommand;
-import Threads.GPSmodule;
 import Threads.Navigator;
 import Threads.PathProcessor;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import test.utils.CordinateServer;
+import test.utils.CoordinateServer;
 
 /**
  * @author rajeevan
@@ -210,10 +206,10 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
 
 
         Person p = new Person(0, 0, 34, 11, Direction.d_90);
-
-        GPSmodule gps = new GPSmodule(p, "btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false",this.form);
-        Thread GPS = new Thread(gps, "gpsmodule");
-        GPS.start();
+        CoordinateServable cs = new CoordinateServer(0, 0,p);
+       // CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false");
+        Thread cord = new Thread(cs);
+        cord.start();
 
         PathFinder pf = new AStarPathFinder();
         PathProcessor pathprocess = new PathProcessor(p, pf);
@@ -223,12 +219,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         Navigator nav = new Navigator(p);
         Thread navThread = new Thread(nav);
         navThread.start();
-        while (true) {
-           // if (nav.isUpdated()) {
-                this.form.deleteAll();
-                this.form.append(p + nav.getNavDir().toString());
-                //nav.setUpdated(false);
-           // }
-        }
+        
     }
 }

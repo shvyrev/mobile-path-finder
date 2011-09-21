@@ -47,11 +47,11 @@ public class Navigator implements Runnable{
                 try {
                     m.wait();
                 } catch (InterruptedException ex) {
-                    System.out.println("NavigatorInterrupted");
+      //              System.out.println("NavigatorInterrupted");
                 }
                 updateCommandDirection();
                 this.setUpdated(true);
-                System.out.println("Navigator:"+count +"command updated");
+        //        System.out.println("Navigator:"+count +"command updated");
             }
         }
         
@@ -59,16 +59,16 @@ public class Navigator implements Runnable{
     
     private void updateCommandDirection(){
         synchronized(p){
-        System.out.println(p);
+      //  System.out.println(p);
         Direction currentDirection=p.getDirection();
-        System.out.println("current person dir:="+currentDirection);
+      //  System.out.println("current person dir:="+currentDirection);
         Direction pathDirection=m.pathStartingDirection();
-        System.out.println("current path starting dir:="+pathDirection);
+      //  System.out.println("current path starting dir:="+pathDirection);
         Direction difference=Direction.getDirection(currentDirection, pathDirection);
         navDir=NavDirCommand.convertDirection(difference);
         s.play_Sound(navDir);
-        System.out.println(navDir);
-        
+       System.out.println(p);
+            System.out.println(navDir);
         }
         
     }
