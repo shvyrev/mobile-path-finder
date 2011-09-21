@@ -4,6 +4,7 @@
  */
 package Components;
 
+import Exceptions.WalkingDistanceError;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,15 +15,15 @@ import javax.microedition.io.StreamConnection;
  *
  * @author rajeevan
  */
-public class BluetoothModule implements Runnable {
+public class BluetoothModule implements  CoordinateServable {
 
-    public boolean isActive = false;
-    public boolean isConnected = false;
-    
+    private Person p;
+
+    private int x;
+    private int y;
     
     // current bluetooth device
     private String btUrl = "";
-    private  String btName = "";
     public String error = "No Error";
     
     // current connection
@@ -31,76 +32,37 @@ public class BluetoothModule implements Runnable {
     DataOutputStream out = null;
 
 
-    
-    // state
-    public final static byte STATE_SEARCH_SENTENCE_BEGIN = 0;
-    public final static byte STATE_READ_DATA_TYPE = 1;
-    public final static byte STATE_READ_SENTENCE = 2;
-
-
-    
-    
-
-    public void start() {
-        if (isActive) {
-            stop();
-        }
-        connect();
-        if (isConnected) {
-            isActive = true;
-            Thread t = new Thread(this);
-            t.start();
-        }
+    public BluetoothModule(String btUrl,Person p){
+        this.p=p;
+        this.btUrl=btUrl;
     }
 
-    public void stop() {
-        if (isActive) {
-            isActive = false;
-            try {
-                while (isConnected) {
-                    close();
-                    Thread.sleep(100);
-                }
-            } catch (Throwable t) {
-                error = "stop:" + t.toString();
-                close();
-            }
-        }
-    }
 
     public void run() {
-        isActive = true;
-        while (isActive) {
-            try {
-                // check if connection is still open
-                if (!isConnected && isActive) {
-                    // connect to gps device
-                    connect();
-                } else {
-                }
-            } catch (Throwable t) {
-                error = "run:" + t.toString();
-                close();
+
+        this.connect();
+        while (true) {
+            synchronized(p){
+               updateCoordinate();
+               p.notify();
             }
+
         }
-        close();
-        isActive = false;
     }
+
+
 
     public void connect() {
         //if(isConnected == false){  
         if (btUrl == null || (btUrl.trim().compareTo("") == 0)) {
-            isConnected = false;
+         
             return;
         }
         try {
             conn = (StreamConnection) Connector.open(btUrl, Connector.READ_WRITE);
             in = new DataInputStream(conn.openInputStream());
             out = new DataOutputStream(conn.openOutputStream());
-            isConnected = true;
-            // coding for print the BTurl & BT name in hyperterminal. only for checking
-            // this.senddata(btUrl);
-            //this.senddata(btName);
+        
         } catch (IOException e) {
             close();
         }
@@ -127,7 +89,7 @@ public class BluetoothModule implements Runnable {
             out = null;
             conn = null;
         }
-        isConnected = false;
+       
     }
 
     public boolean senddata(String comm) {
@@ -147,12 +109,11 @@ public class BluetoothModule implements Runnable {
         return false;
     }
 
-    public void setURL(String name,String URL){
-        this.btName=name;
+    public void setURL(String URL){
         this.btUrl=URL;
     }
     
-    public int[] get_coordinate() {
+    public int[] get_coordinate_data() {
         int i = 0;
         int j = 0;
 
@@ -197,4 +158,18 @@ public class BluetoothModule implements Runnable {
         }
         return String.valueOf(dd);
     }
+
+ 
+    public void updateCoordinate() {
+        int[] coordinate = this.get_coordinate_data();
+                this.x=coordinate[0];
+                this.y=coordinate[1];
+            try {
+                p.updatePosition(x, y);
+            } catch (WalkingDistanceError ex) {
+                ex.printStackTrace();
+            }
+    }
+
+
 }

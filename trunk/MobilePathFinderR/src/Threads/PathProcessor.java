@@ -42,13 +42,12 @@ public class PathProcessor implements Runnable {
             
             
             if (p.isUpdated()) {
-                
                 this.updatePath();
                 p.setUsed();
                 }
             
             }
-                System.out.println("PathProcessor "+count+" Path updated" );
+            //    System.out.println("PathProcessor "+count+" Path updated" );
                 //System.out.println(m);
                 synchronized (m) {
                     m.notify();
@@ -59,8 +58,6 @@ public class PathProcessor implements Runnable {
     }
 
     private void updatePath() {
-        
             pathFinder.findPath(p.getCurrentX(), p.getCurrentY(), DestX, DestY);
-       
     }
 }

@@ -92,9 +92,9 @@ public class Person {
                 currentY = y;
                 this.way.appendStep(x, y);
                 updated = true;
-                System.out.println("Person: direction " + direction + " " + x + " " + y);
+           //     System.out.println("Person: direction " + direction + " " + x + " " + y);
                 //System.out.println(this);
-                System.out.println("Person: updated");
+          //      System.out.println("Person: updated");
                 return true;
             } else {
                 throw new WalkingDistanceError();

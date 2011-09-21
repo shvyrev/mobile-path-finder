@@ -5,13 +5,12 @@
 package test;
 
 import test.utils.RandomMapGen;
-import test.utils.CordinateServer;
+import test.utils.CoordinateServer;
 import Algorithm.AStarPathFinder;
 import Algorithm.PathFinder;
 import Components.MapLib;
 import DataStructure.Direction;
 import DataStructure.Map;
-import Threads.GPSmodule;
 import Threads.PathProcessor;
 import Components.Person;
 import Threads.Navigator;
@@ -33,16 +32,16 @@ public class test {
         frm.append(m.toString());
         MapLib.map = m;
 
-        CordinateServer c = new CordinateServer(0, 0);
-        Thread Coordinateserver = new Thread(c, "coordinateServer");
-        Coordinateserver.start();
+        
 
 
         Person p = new Person(0, 0, 14, 14, Direction.d_315);
      //   GPSmodule gps = new GPSmodule(p, c);
      //   Thread GPS = new Thread(gps, "gpsmodule");
      //   GPS.start();
-
+CoordinateServer c = new CoordinateServer(0, 0,p);
+        Thread Coordinateserver = new Thread(c, "coordinateServer");
+        Coordinateserver.start();
         PathFinder pf = new AStarPathFinder();
         PathProcessor pathprocess = new PathProcessor(p, pf);
         Thread pathProcessThread = new Thread(pathprocess, "pathprocessor");
