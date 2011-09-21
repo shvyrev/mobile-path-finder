@@ -19,32 +19,28 @@ public class BluetoothModule implements Runnable {
     public int mode = 0;
     public boolean isActive = false;
     public boolean isConnected = false;
+    
+    
     // current bluetooth device
-    public String btUrl = "";
-    public String btName = "";
+    private String btUrl = "";
+    private  String btName = "";
     public String error = "No Error";
-    private String url = "btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false";
-    private String name = "KAJAN-PC";
+    
     // current connection
     StreamConnection conn = null;
     DataInputStream in = null;
     DataOutputStream out = null;
-    StringBuffer sb;
-    String currentInfo;
-    String Received_Data;
-    static boolean permission_close = false;
-    private boolean pair_status = false;
+
+
+    
     // state
     public final static byte STATE_SEARCH_SENTENCE_BEGIN = 0;
     public final static byte STATE_READ_DATA_TYPE = 1;
     public final static byte STATE_READ_SENTENCE = 2;
-    private boolean scan_ok = false;
-    private boolean selection_ok = false;
-    private boolean confirm_ok = false;
-    private boolean close_ok = false;
 
-    public static void init() {
-    }
+
+    
+    
 
     public void start() {
         if (isActive) {
@@ -58,9 +54,6 @@ public class BluetoothModule implements Runnable {
         }
     }
 
-    /**
-     * Stop connection to the device and ends thread
-     */
     public void stop() {
         if (isActive) {
             isActive = false;
@@ -95,9 +88,6 @@ public class BluetoothModule implements Runnable {
         isActive = false;
     }
 
-    /**
-     * Connect to the bluetooth device
-     */
     public void connect() {
         //if(isConnected == false){  
         if (btUrl == null || (btUrl.trim().compareTo("") == 0)) {
@@ -159,6 +149,11 @@ public class BluetoothModule implements Runnable {
         return false;
     }
 
+    public void setURL(String name,String URL){
+        this.btName=name;
+        this.btUrl=URL;
+    }
+    
     public int[] get_coordinate() {
         int i = 0;
         int j = 0;
@@ -185,7 +180,6 @@ public class BluetoothModule implements Runnable {
     }
 
     public String getData() {
-
         char dd = 'X';
         int num = 0;
         boolean status = false;
@@ -198,13 +192,11 @@ public class BluetoothModule implements Runnable {
                     
                     dd = (char) num;
                     status = true;
-                } else {
-                }
+                } 
             } catch (IOException ex) {
-                ex.printStackTrace();
+                System.out.println(ex);
             }
         }
         return String.valueOf(dd);
-
     }
 }
