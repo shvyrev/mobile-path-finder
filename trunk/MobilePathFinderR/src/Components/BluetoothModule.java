@@ -16,7 +16,6 @@ import javax.microedition.io.StreamConnection;
  */
 public class BluetoothModule implements Runnable {
 
-    public int mode = 0;
     public boolean isActive = false;
     public boolean isConnected = false;
     
@@ -99,7 +98,6 @@ public class BluetoothModule implements Runnable {
             in = new DataInputStream(conn.openInputStream());
             out = new DataOutputStream(conn.openOutputStream());
             isConnected = true;
-            mode = 0;
             // coding for print the BTurl & BT name in hyperterminal. only for checking
             // this.senddata(btUrl);
             //this.senddata(btName);

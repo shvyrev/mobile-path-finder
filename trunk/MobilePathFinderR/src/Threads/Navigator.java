@@ -19,6 +19,7 @@ import DataStructure.NavDirCommand;
 public class Navigator implements Runnable{
     
     NavDirCommand navDir;
+    private boolean updated;
     SoundModule s;
     Person p;
     Map m;
@@ -29,6 +30,14 @@ public class Navigator implements Runnable{
       this.p=p;
       navDir=new NavDirCommand(0);
   }
+
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
+    }
   
 
    public void run() {
@@ -41,7 +50,7 @@ public class Navigator implements Runnable{
                     System.out.println("NavigatorInterrupted");
                 }
                 updateCommandDirection();
-                
+                this.setUpdated(true);
                 System.out.println("Navigator:"+count +"command updated");
             }
         }

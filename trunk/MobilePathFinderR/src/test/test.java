@@ -39,9 +39,9 @@ public class test {
 
 
         Person p = new Person(0, 0, 14, 14, Direction.d_315);
-        GPSmodule gps = new GPSmodule(p, c);
-        Thread GPS = new Thread(gps, "gpsmodule");
-        GPS.start();
+     //   GPSmodule gps = new GPSmodule(p, c);
+     //   Thread GPS = new Thread(gps, "gpsmodule");
+     //   GPS.start();
 
         PathFinder pf = new AStarPathFinder();
         PathProcessor pathprocess = new PathProcessor(p, pf);
