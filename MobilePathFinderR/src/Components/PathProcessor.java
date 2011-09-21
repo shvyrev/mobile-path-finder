@@ -4,9 +4,7 @@
  */
 package Components;
 
-import Components.Person;
 import Algorithm.PathFinder;
-import Components.MapLib;
 import DataStructure.Map;
 
 /**
