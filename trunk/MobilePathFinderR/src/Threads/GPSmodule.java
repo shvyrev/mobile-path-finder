@@ -14,6 +14,7 @@ import test.utils.CordinateServer;
  */
 public class GPSmodule implements Runnable {
 
+    
     CordinateServer server;
     Person p;
 
