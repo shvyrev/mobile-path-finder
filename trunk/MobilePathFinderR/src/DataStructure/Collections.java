@@ -45,5 +45,21 @@ public class Collections {
 
     }
     
+//    
+//    The steps are:
+//
+//    Pick an element, called a pivot, from the list.
+//    Reorder the list so that all elements with values less than the pivot come before the pivot, while all elements with values greater than the pivot come after it (equal values can go either way). After this partitioning, the pivot is in its final position. This is called the partition operation.
+//    Recursively sort the sub-list of lesser elements and the sub-list of greater elements.
+//
+//The base case of the recursion are lists of size zero or one, which never need to be sorted.
+    private static void AssendingQuichSort(){
+        
+    }
+    
+    private static void Sort(int pivot){
+        
+    }
+    
    
 }

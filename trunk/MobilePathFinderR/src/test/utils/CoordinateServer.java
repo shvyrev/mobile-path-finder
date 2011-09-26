@@ -61,7 +61,7 @@ public class CoordinateServer implements CoordinateServable {
                     currentY += y;
                     synchronized(p){
                         this.updateCoordinate();
-                        p.notify();
+                        //p.notify();
                     }
                 try {
                     System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);

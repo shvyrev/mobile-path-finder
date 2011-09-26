@@ -14,6 +14,7 @@ import Components.Navigator;
 import Components.PathProcessor;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import test.utils.CoordinateServer;
 
 /**
  * @author rajeevan
@@ -180,8 +181,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         } else {
             initialize();
             startMIDlet();
-            //test.run(this.form);
-
             Thread t = new Thread(this);
             t.start();
         }
@@ -207,9 +206,11 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
 
         Person p = new Person(0, 0, 34, 11, Direction.d_90);
         //CoordinateServable cs = new CoordinateServer(0, 0,p);
-        CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false",p);
+        
+        
+        CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false",p,this.form);
         Thread cord = new Thread(cs);
-        cord.start();
+        
 
         PathFinder pf = new AStarPathFinder();
         PathProcessor pathprocess = new PathProcessor(p, pf);
@@ -219,6 +220,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         Navigator nav = new Navigator(p);
         Thread navThread = new Thread(nav);
         navThread.start();
-        
+        cord.start();
     }
 }

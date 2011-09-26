@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
+import javax.microedition.lcdui.Form;
 
 /**
  *
@@ -37,6 +38,15 @@ public class BluetoothModule implements  CoordinateServable {
         this.btUrl=btUrl;
     }
 
+    //
+    Form f;
+    public BluetoothModule(String btUrl,Person p,Form f){
+        this(btUrl,p);
+        this.f=f;
+    }
+            
+            
+    //
 
     public void run() {
 
@@ -104,7 +114,7 @@ public class BluetoothModule implements  CoordinateServable {
             return true;
         } catch (IOException ex) {
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         return false;
     }
@@ -165,11 +175,13 @@ public class BluetoothModule implements  CoordinateServable {
                 this.x=coordinate[0];
                 this.y=coordinate[1];
             try {
-                p.updatePosition(x, y);
+                boolean rtrn=p.updatePosition(x, y);
+                f.deleteAll();
+                f.append("x="+coordinate[0]+"y="+coordinate[1]+"return statument from person:"+rtrn);
+                
             } catch (WalkingDistanceError ex) {
-                ex.printStackTrace();
+                f.append(ex.toString());
             }
     }
-
 
 }
