@@ -4,14 +4,12 @@
  */
 package test;
 
-import Algorithm.AStarPathFinder;
-import Algorithm.PathFinder;
 import Components.BluetoothModule;
+import Components.ComponentsLib;
 import Components.CoordinateServable;
 import Components.Person;
+import DataStructure.Coordinate;
 import DataStructure.Direction;
-import Components.Navigator;
-import Components.PathProcessor;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import test.utils.CoordinateServer;
@@ -202,24 +200,20 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
     }
 
     public void run() {
+        
+        ComponentsLib.f=this.form;
+        
+        Coordinate c=new Coordinate();
 
-
-        Person p = new Person(0, 0, 34, 11, Direction.d_90);
-        //CoordinateServable cs = new CoordinateServer(0, 0,p);
+        Person p = new Person(0, 0, 34, 11, Direction.d_90,c);
+        Thread person=new Thread(p);
+        person.start();
+        //CoordinateServable cs = new CoordinateServer(0,0,c);
         
         
-        CoordinateServable cs = new BluetoothModule("btspp://002186AE8285:1;authenticate=false;encrypt=false;master=false",p,this.form);
-        Thread cord = new Thread(cs);
+        CoordinateServable cs = new BluetoothModule("btspp://001106220300:1;authenticate=false;encrypt=false;master=false",c,this.form);
+        Thread bluetooth= new Thread(cs);
+        bluetooth.start();
         
-
-        PathFinder pf = new AStarPathFinder();
-        PathProcessor pathprocess = new PathProcessor(p, pf);
-        Thread pathProcessThread = new Thread(pathprocess, "pathprocessor");
-        pathProcessThread.start();
-
-        Navigator nav = new Navigator(p);
-        Thread navThread = new Thread(nav);
-        navThread.start();
-        cord.start();
     }
 }

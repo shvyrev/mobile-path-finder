@@ -1,6 +1,6 @@
 package Algorithm;
 
-import Components.MapLib;
+import Components.ComponentsLib;
 import DataStructure.Collections;
 import DataStructure.Path;
 import DataStructure.Map;
@@ -18,7 +18,6 @@ public class AStarPathFinder implements PathFinder {
     private VectorSub closed = new VectorSub();
     private SortedList open = new SortedList();
     private int maxSearchDistance;
-    Map map;
     private Node[][] nodes;
     private boolean allowDiagMovement = true;
     private HeuristicCost heuristic;
@@ -162,20 +161,20 @@ public class AStarPathFinder implements PathFinder {
 
     //constructors
     ///##########################################################################
-    public AStarPathFinder(int maxSearchDistance, HeuristicCost heuristic) {
-        this.map = MapLib.map;
+    public AStarPathFinder(int maxSearchDistance, HeuristicCost heuristic,int width,int height) {
+
         this.maxSearchDistance = maxSearchDistance;
         this.heuristic = heuristic;
         
-        nodes = new Node[map.getWidth()][map.getHeight()];
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+        nodes = new Node[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 nodes[x][y] = new Node(x, y);
             }
         }
     }
-    public AStarPathFinder(){
-        this(MapLib.map.getHeight()*MapLib.map.getWidth(),new DirectHeuristicCost());
+    public AStarPathFinder(int width,int height){
+        this(ComponentsLib.map.getHeight()*ComponentsLib.map.getWidth(),new DirectHeuristicCost(),width,height);
     }
 
     ///##########################################################################
@@ -269,7 +268,7 @@ public class AStarPathFinder implements PathFinder {
 
     //this is the actual implementation of A* path finding algorithm
     
-    public Path findPath(int sx, int sy, int tx, int ty) {
+    public Path findPath(int sx, int sy, int tx, int ty,Map map) {
         // first check, if the destination is blocked, we can't get there
         if (map.isBlocked(tx, ty).booleanValue()) {
             return null;
@@ -389,9 +388,6 @@ public class AStarPathFinder implements PathFinder {
         }
         path.prependStep(sx, sy);
         map.setPath(path);
-        //System.out.println("path is "+path);
-        // thats it, we have our path
-
         return path;
     }
 

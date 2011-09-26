@@ -5,7 +5,9 @@
 package Components;
 
 import DataStructure.NavDirCommand;
+import java.io.IOException;
 import javax.microedition.media.Manager;
+import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.control.VolumeControl;
 
@@ -16,33 +18,48 @@ import javax.microedition.media.control.VolumeControl;
 public class SoundModule {
 
     private VolumeControl volume;
-    static Player player;
+   // private Player player;
+    
+    private Player[] player=new Player[6];
+    
 
     public SoundModule(VolumeControl volume) {
         this.volume = volume;
     }
     
     public SoundModule(){
-        
+       initilize();
     }
 
-    public  void play_Sound(String loc) {
+    public void initilize(){
         try {
-            player = Manager.createPlayer(getClass().getResourceAsStream(loc+".wav"), "audio/x-wav");
-            player.start();
+            player[0]=Manager.createPlayer(getClass().getResourceAsStream("LLEFT.wav"), "audio/x-wav");
+            player[1]=Manager.createPlayer(getClass().getResourceAsStream("LEFT.wav"), "audio/x-wav");
+            player[2]=Manager.createPlayer(getClass().getResourceAsStream("STRIGHT.wav"), "audio/x-wav");
+            player[3]=Manager.createPlayer(getClass().getResourceAsStream("RIGHT.wav"), "audio/x-wav");
+            player[4]=Manager.createPlayer(getClass().getResourceAsStream("RRIGHT.wav"), "audio/x-wav");
+            player[5]=Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (MediaException ex) {
+            ex.printStackTrace();
+        }
+}
+
+    public  void play_Sound(int player) {
+        
+
+    }
+
+    public void play_Sound(NavDirCommand nav) {
+
+       try {
+            this.player[nav.getDirection()+2].start();
         }catch(NullPointerException e){
             System.out.println("null pointer exception : playing sound");
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("error on play sound");
         }
-
-    }
-
-    public void play_Sound(NavDirCommand nav) {
-        
-        
-        this.play_Sound(nav.toString());
-        //this.play_Sound("STRIGHT.wav");
     }
 }
