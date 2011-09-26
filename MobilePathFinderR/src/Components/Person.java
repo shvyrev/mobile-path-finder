@@ -36,7 +36,7 @@ public class Person {
         this.destX = destX;
         this.destY = destY;
         way.appendStep(startX, startY);
-        this.updated = true;
+        this.updated = false;
         direction = startingDir;
         this.map = MapLib.map;
     }
@@ -92,11 +92,10 @@ public class Person {
                 currentY = y;
                 this.way.appendStep(x, y);
                 updated = true;
-           //     System.out.println("Person: direction " + direction + " " + x + " " + y);
-                //System.out.println(this);
-          //      System.out.println("Person: updated");
+                this.notify();
                 return true;
             } else {
+                updated=false;
                 throw new WalkingDistanceError();
             }
         }
@@ -126,7 +125,6 @@ public class Person {
             }
             s += "\n";
         }
-
         return s;
     }
 }

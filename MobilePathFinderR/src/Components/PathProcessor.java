@@ -29,11 +29,12 @@ public class PathProcessor implements Runnable {
     }
 
     public void run() {
-        int count=0;
         while (true) {
             synchronized(p){
             try {
+                System.out.println("waiting for p to notify");
                 p.wait();
+                System.out.println("pathprocessor notified");
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -45,13 +46,10 @@ public class PathProcessor implements Runnable {
                 }
             
             }
-            //    System.out.println("PathProcessor "+count+" Path updated" );
-                //System.out.println(m);
                 synchronized (m) {
                     m.notify();
+                    System.out.println("map notified with pathprocessor");
                 }
-           
-            count++;
         }
     }
 

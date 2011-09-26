@@ -4,9 +4,6 @@
  */
 package Components;
 
-import Components.MapLib;
-import Components.Person;
-import Components.SoundModule;
 import DataStructure.Direction;
 import DataStructure.Map;
 import DataStructure.NavDirCommand;
@@ -45,7 +42,9 @@ public class Navigator implements Runnable{
         while(true){
             synchronized(m){
                 try {
+                    System.out.println("navigater is waiting for map");
                     m.wait();
+                    System.out.println("navigator is notified");
                 } catch (InterruptedException ex) {
       //              System.out.println("NavigatorInterrupted");
                 }
