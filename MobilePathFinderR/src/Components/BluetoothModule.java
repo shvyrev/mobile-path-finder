@@ -4,7 +4,7 @@
  */
 package Components;
 
-import Exceptions.WalkingDistanceError;
+import DataStructure.Coordinate;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,63 +16,48 @@ import javax.microedition.lcdui.Form;
  *
  * @author rajeevan
  */
-public class BluetoothModule implements  CoordinateServable {
+public class BluetoothModule implements CoordinateServable {
 
-    private Person p;
-
-    private int x;
-    private int y;
-    
+    Coordinate coordinate;
     // current bluetooth device
     private String btUrl = "";
-    public String error = "No Error";
-    
     // current connection
     StreamConnection conn = null;
     DataInputStream in = null;
     DataOutputStream out = null;
 
-
-    public BluetoothModule(String btUrl,Person p){
-        this.p=p;
-        this.btUrl=btUrl;
+    public BluetoothModule(String btUrl, Coordinate coordinate) {
+        this.btUrl = btUrl;
+        this.coordinate = coordinate;
     }
-
-    //
+    //remove after test
     Form f;
-    public BluetoothModule(String btUrl,Person p,Form f){
-        this(btUrl,p);
-        this.f=f;
-    }
-            
-            
-    //
 
+    public BluetoothModule(String btUrl, Coordinate coordinate, Form f) {
+        this(btUrl, coordinate);
+        this.f = f;
+    }
+
+    //
     public void run() {
 
         this.connect();
         while (true) {
-            synchronized(p){
-               updateCoordinate();
-               p.notify();
-            }
-
+            this.receiveCoordinate();
         }
     }
-
-
 
     public void connect() {
         //if(isConnected == false){  
         if (btUrl == null || (btUrl.trim().compareTo("") == 0)) {
-         
+
             return;
         }
         try {
             conn = (StreamConnection) Connector.open(btUrl, Connector.READ_WRITE);
             in = new DataInputStream(conn.openInputStream());
             out = new DataOutputStream(conn.openOutputStream());
-        
+
         } catch (IOException e) {
             close();
         }
@@ -93,13 +78,13 @@ public class BluetoothModule implements  CoordinateServable {
             out = null;
             conn = null;
         } catch (Throwable t) {
-            error = "close" + t.toString();
+            System.out.println(t);
         } finally {
             in = null;
             out = null;
             conn = null;
         }
-       
+
     }
 
     public boolean senddata(String comm) {
@@ -119,10 +104,10 @@ public class BluetoothModule implements  CoordinateServable {
         return false;
     }
 
-    public void setURL(String URL){
-        this.btUrl=URL;
+    public void setURL(String URL) {
+        this.btUrl = URL;
     }
-    
+
     public int[] get_coordinate_data() {
         int i = 0;
         int j = 0;
@@ -155,13 +140,13 @@ public class BluetoothModule implements  CoordinateServable {
 
         while (!status) {
             try {
-               
+
                 if (in.available() != 0) {
                     num = in.read();
-                    
+
                     dd = (char) num;
                     status = true;
-                } 
+                }
             } catch (IOException ex) {
                 System.out.println(ex);
             }
@@ -169,19 +154,10 @@ public class BluetoothModule implements  CoordinateServable {
         return String.valueOf(dd);
     }
 
- 
-    public void updateCoordinate() {
+    public void receiveCoordinate() {
         int[] coordinate = this.get_coordinate_data();
-                this.x=coordinate[0];
-                this.y=coordinate[1];
-            try {
-                boolean rtrn=p.updatePosition(x, y);
-                f.deleteAll();
-                f.append("x="+coordinate[0]+"y="+coordinate[1]+"return statument from person:"+rtrn);
-                
-            } catch (WalkingDistanceError ex) {
-                f.append(ex.toString());
-            }
+        this.coordinate.setCoordinate(coordinate[0], coordinate[1]);
+        f.deleteAll();
+        f.append("x=" + coordinate[0] + "y=" + coordinate[1] + "return statument from person:");
     }
-
 }

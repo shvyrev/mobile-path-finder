@@ -4,16 +4,23 @@
  */
 package Components;
 
+import Algorithm.AStarPathFinder;
+import Algorithm.DirectHeuristicCost;
+import Algorithm.PathFinder;
 import DataStructure.CartisianMap;
 import DataStructure.Map;
+import DataStructure.Path;
+import javax.microedition.lcdui.Form;
 import test.utils.RandomMapGen;
 
 /**
  *
  * @author rajeevan
  */
-public class MapLib {
-    public static Map map=RandomMapGen.randomMap(36, 17);;
+public class ComponentsLib {
+    public static Map map=RandomMapGen.randomMap(36, 17);
+   public static Form f;
+    
 
     static{
         Boolean[][] floor;
@@ -27,11 +34,11 @@ public class MapLib {
 
     }
 
-    public MapLib(Map m){
-        MapLib.map=m;
+    public ComponentsLib(Map m){
+        ComponentsLib.map=m;
     }
 
-    public MapLib(){
+    public ComponentsLib(){
         map=RandomMapGen.randomMap(36, 17);
     }
 

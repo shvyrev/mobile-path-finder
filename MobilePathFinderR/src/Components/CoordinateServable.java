@@ -11,6 +11,7 @@ package Components;
  */
 public interface CoordinateServable extends Runnable {
 
-    public void updateCoordinate();
+
+    public void receiveCoordinate();
 
 }

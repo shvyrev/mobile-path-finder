@@ -9,36 +9,29 @@ package test.utils;
  * @author rajeevan
  */
 import Components.CoordinateServable;
-import Components.MapLib;
-import Components.Person;
+import Components.ComponentsLib;
+import DataStructure.Coordinate;
 import DataStructure.Map;
-import Exceptions.WalkingDistanceError;
 import java.util.Random;
 
 public class CoordinateServer implements CoordinateServable {
 
-    Person p;
     Map m;
     int currentX, currentY;
+    private Coordinate coordinate;
 
-
-
-    public CoordinateServer(int x, int y,Person p) {
-        this.p=p;
+    public CoordinateServer(int x, int y, Coordinate coordinate) {
         this.currentX = x;
         this.currentY = y;
-        this.m = MapLib.map;
-    }
-
-    public CoordinateServer(Person p){
-        this(0,0,p);
+        this.m = ComponentsLib.map;
+        this.coordinate=coordinate;
     }
 
     public void run() {
         Random r = new Random(System.currentTimeMillis());
         Random s = new Random(System.currentTimeMillis());
 
- 
+
         while (true) {
             int a = s.nextInt(100);
             int x, y;
@@ -53,36 +46,28 @@ public class CoordinateServer implements CoordinateServable {
             if (x == 0 && y == 0) {
                 continue;
             }
-            //System.out.println(currentX+x);
-           // System.out.println(currentY+y);
+            System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
+
             if (!m.isBlocked(currentX + x, currentY + y).booleanValue()) {
-                
+             
                     currentX += x;
                     currentY += y;
-                    synchronized(p){
-                        this.updateCoordinate();
-                        //p.notify();
-                    }
+                    coordinate.setCoordinate(currentX, currentY);
+
                 try {
-                    System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
+                   
                     Thread.sleep(3000);
                 } catch (InterruptedException ex) {
                     //System.out.println("Waken up");
                 }
             }
 
-            
+
+
         }
 
     }
 
-    public void updateCoordinate() {
-        try {
-            p.updatePosition(currentX, currentY);
-        } catch (WalkingDistanceError ex) {
-            System.out.println("error on updating coordinate");
-            //ex.printStackTrace();
-        }
+    public void receiveCoordinate() {
     }
-
 }

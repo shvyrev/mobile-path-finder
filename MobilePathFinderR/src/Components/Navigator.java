@@ -7,27 +7,30 @@ package Components;
 import DataStructure.Direction;
 import DataStructure.Map;
 import DataStructure.NavDirCommand;
-
+import javax.microedition.lcdui.Form;
 
 /**
  *
  * @author rajeevan
  */
-public class Navigator implements Runnable{
-    
+public class Navigator {
+
     NavDirCommand navDir;
     private boolean updated;
     SoundModule s;
-    Person p;
-    Map m;
-    
-  public Navigator(Person p){
-      m=MapLib.map;
-      s=new SoundModule();
-      this.p=p;
-      navDir=new NavDirCommand(0);
-  }
 
+    //remove after testing phase
+    Form f;
+    //
+
+    public Navigator() {
+        s = new SoundModule();
+        navDir = new NavDirCommand(0);
+        this.f=ComponentsLib.f;
+    }
+    //have to remove after testing pahse
+
+    //
     public boolean isUpdated() {
         return updated;
     }
@@ -35,44 +38,14 @@ public class Navigator implements Runnable{
     public void setUpdated(boolean updated) {
         this.updated = updated;
     }
-  
 
-   public void run() {
-       int count=0;
-        while(true){
-            synchronized(m){
-                try {
-                    System.out.println("navigater is waiting for map");
-                    m.wait();
-                    System.out.println("navigator is notified");
-                } catch (InterruptedException ex) {
-      //              System.out.println("NavigatorInterrupted");
-                }
-                updateCommandDirection();
-                this.setUpdated(true);
-        //        System.out.println("Navigator:"+count +"command updated");
-            }
-        }
-        
-    }
-    
-    private void updateCommandDirection(){
-        synchronized(p){
-      //  System.out.println(p);
-        Direction currentDirection=p.getDirection();
-      //  System.out.println("current person dir:="+currentDirection);
-        Direction pathDirection=m.pathStartingDirection();
-      //  System.out.println("current path starting dir:="+pathDirection);
-        Direction difference=Direction.getDirection(currentDirection, pathDirection);
-        navDir=NavDirCommand.convertDirection(difference);
+  public NavDirCommand updateCommandDirection(Direction currentDirection,Direction pathDirection) {
+
+        Direction difference = Direction.getDirection(currentDirection, pathDirection);
+        navDir = NavDirCommand.convertDirection(difference);
+        this.setUpdated(true);
         s.play_Sound(navDir);
-       System.out.println(p);
-            System.out.println(navDir);
-        }
-        
-    }
-    
-    public NavDirCommand getNavDir(){
-        return this.navDir;
+        f.append(navDir.toString());
+        return navDir;
     }
 }
