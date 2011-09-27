@@ -15,7 +15,7 @@ public class Coordinate {
     private boolean updated;
 
     public synchronized int[] getCoordinate() {
-        updated = false;
+        
         if (!updated) {
             try {
                 wait();
@@ -23,7 +23,7 @@ public class Coordinate {
                 ex.printStackTrace();
             }
         }
-
+        updated = false;    
         return new int[]{x, y};
     }
 

@@ -12,6 +12,7 @@ import DataStructure.Direction;
 import DataStructure.Map;
 import DataStructure.Path;
 import Exceptions.WalkingDistanceError;
+import test.utils.CoordinateServer;
 
 /**
  *
@@ -23,31 +24,42 @@ public class Person implements Runnable {
     private int currentX;
     private int currentY;
     private Direction direction;
-    private int destX;
-    private int destY;
+    private int terminalX;
+    private int terminalY;
+    
     private Path way = new Path();  //this is used to store the walking history of the person
     private Map map;
+    private Coordinate receivedCoordinate;
+    
     private PathFinder pf;
     private Navigator nav;
-    private Coordinate receivedCoordinate;
+    
+    private CoordinateServable bt;
     //properties of person
     private double maximumStepDist = 2;
     private double stepDeviationFactor = 0.5;
 
     //constructor 
     //input : starting position and destination position
-    public Person(int startX, int startY, int destX, int destY, Direction startingDir, Coordinate c) {
+    public Person(int startX, int startY, Direction startingDir,Map m) {
         this.currentX = startX;
         this.currentY = startY;
-        this.destX = destX;
-        this.destY = destY;
+        this.terminalX = m.getTerminalX();
+        this.terminalY = m.getTerminalY();
         direction = startingDir;
         way.appendStep(startX, startY);
-
-        this.map = ComponentsLib.map;
+       // bt=new BluetoothModule(BluetoothModule.HANDHELD);
+       bt=new CoordinateServer(0, 0,m);;
+        
+        
+        this.map = m;
         this.pf = new AStarPathFinder(map.getHeight() * map.getWidth(), new DirectHeuristicCost(),map.getWidth(),map.getHeight());
         this.nav = new Navigator();
-        this.receivedCoordinate=c;
+        this.receivedCoordinate=ComponentsLib.coordinate;
+        
+        
+        Thread Bluetooth=new Thread(bt);
+        Bluetooth.start();
     }
 
     public Direction getDirection() {
@@ -107,16 +119,23 @@ public class Person implements Runnable {
     }
 
     public void run() {
-        while (true) {
+        while (!(currentX==terminalX&&currentY==terminalY)) {
             try {
                 updatePosition();
+                
             } catch (WalkingDistanceError ex) {
                 ComponentsLib.f.append(ex.toString());
                 continue;
             }
-            pf.findPath(currentX,currentY, destX, destY,map);
-            System.out.println(nav.updateCommandDirection(direction, map.pathStartingDirection()));
+            pf.findPath(currentX,currentY, terminalX, terminalY,map);
+            System.out.println(nav.navigateCommand(direction, map.pathStartingDirection()));
             System.out.println(this);
+            //ComponentsLib.f.deleteAll();
+            //ComponentsLib.f.append(this.toString());
         }
+        System.out.println("Destination Reached");
+        //bt.sendExitSeq();
+        //bt.changeMode(BluetoothModule.ELEVATOR);
+        
     }
 }

@@ -21,13 +21,14 @@ public class RandomMapGen{
         for(int x=0;x<b.length;x++){
             for(int y=0;y<b[0].length;y++){
                 int nxtInt=r.nextInt(100);
-                b[x][y]=(nxtInt<=75)?Boolean.TRUE:Boolean.FALSE;
+                b[x][y]=(nxtInt<=80)?Boolean.TRUE:Boolean.FALSE;
                 
             }
         }
         b[0][0]=Boolean.TRUE;
         b[width-1][height-1]=Boolean.TRUE;
+        b[width-2][height-2]=Boolean.TRUE;
         
-        return new CartisianMap(b);
+        return new CartisianMap(b,width-1,height-1,width-2,height-2);
     }
 }

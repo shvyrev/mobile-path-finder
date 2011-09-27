@@ -37,15 +37,7 @@ public class Direction {
         this.currentDirection = CurrentDirection;
     }
 
-    public void turnLeft() {
-        currentDirection++;
-        currentDirection %= 8;
-    }
-
-    public void turnRight() {
-        currentDirection += 9;
-        currentDirection %= 8;
-    }
+    
 
     public static Direction getDirection(int startX, int startY, int endX, int endY) {
         float m;
@@ -96,9 +88,6 @@ public class Direction {
         diff=diff<0?(8+diff):diff;
         
         return new Direction(diff);
-        
-        
-        
     }
 
     public String toString() {
@@ -121,5 +110,14 @@ public class Direction {
                 return "315d";
         }
         return "no Direction";
+    }
+    
+    public boolean equals(Object o){
+        if(o!=null && o instanceof Direction ){
+            Direction d=(Direction)o;
+            return (d.currentDirection==this.currentDirection)?true:false;
+        }else{
+            return false;
+        }
     }
 }

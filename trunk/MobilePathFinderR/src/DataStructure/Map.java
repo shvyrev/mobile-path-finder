@@ -17,16 +17,18 @@ public interface Map {
     public Boolean isBlocked(int x, int y);
 
     public void setMap(Boolean[][] floor);
-    
+
     public void setPath(Path p);
-    
+
     public Path getPath();
-    
+
     public Boolean[][] getFloorPlan();
-    
-    public Boolean getValue(int x,int y);
-    
-    public void setValue(int x,int y,Boolean value);
-    
+
     public Direction pathStartingDirection();
+
+    public Direction destinationDirection(int currentX, int currentY);
+
+    public int getTerminalX();
+
+    public int getTerminalY();
 }

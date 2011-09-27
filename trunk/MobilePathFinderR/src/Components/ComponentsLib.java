@@ -4,12 +4,9 @@
  */
 package Components;
 
-import Algorithm.AStarPathFinder;
-import Algorithm.DirectHeuristicCost;
-import Algorithm.PathFinder;
 import DataStructure.CartisianMap;
+import DataStructure.Coordinate;
 import DataStructure.Map;
-import DataStructure.Path;
 import javax.microedition.lcdui.Form;
 import test.utils.RandomMapGen;
 
@@ -18,10 +15,8 @@ import test.utils.RandomMapGen;
  * @author rajeevan
  */
 public class ComponentsLib {
-    public static Map map=RandomMapGen.randomMap(36, 17);
-   public static Form f;
-    
-
+    public final static Map ENTC;
+    public final static Map RANDOM=RandomMapGen.randomMap(36,17);
     static{
         Boolean[][] floor;
         floor=new Boolean[36][17];
@@ -29,25 +24,22 @@ public class ComponentsLib {
         fillFloor(28, 0, 35, 10,floor,Boolean.FALSE);///wall and stonebench
         fillFloor(0, 11, 5,16, floor,Boolean.FALSE);// reception table
         fillFloor(10,6,17,8,floor,Boolean.FALSE); // virtual obstacle
-
-       map=new CartisianMap(floor);
-
+       ENTC=new CartisianMap(floor,34,9,34,11);
     }
 
-    public ComponentsLib(Map m){
-        ComponentsLib.map=m;
-    }
-
-    public ComponentsLib(){
-        map=RandomMapGen.randomMap(36, 17);
-    }
-
-    private static void fillFloor(int startx,int starty,int endx,int endy,Boolean[][] floor,Boolean value){
+    
+    
+   private static void fillFloor(int startx,int starty,int endx,int endy,Boolean[][] floor,Boolean value){
         for(int x=startx;x<=endx;x++){
             for(int y=starty;y<=endy;y++ ){
                 floor[x][y]=value;
             }
         }
     }
-
+   
+   public static Form f;
+   
+   
+   public static Coordinate coordinate=new Coordinate();
+           
 }

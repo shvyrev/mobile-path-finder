@@ -174,7 +174,7 @@ public class AStarPathFinder implements PathFinder {
         }
     }
     public AStarPathFinder(int width,int height){
-        this(ComponentsLib.map.getHeight()*ComponentsLib.map.getWidth(),new DirectHeuristicCost(),width,height);
+        this(ComponentsLib.ENTC.getHeight()*ComponentsLib.ENTC.getWidth(),new DirectHeuristicCost(),width,height);
     }
 
     ///##########################################################################
