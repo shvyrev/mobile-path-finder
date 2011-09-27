@@ -4,15 +4,12 @@
  */
 package test;
 
-import Components.BluetoothModule;
 import Components.ComponentsLib;
-import Components.CoordinateServable;
 import Components.Person;
 import DataStructure.Coordinate;
 import DataStructure.Direction;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import test.utils.CoordinateServer;
 
 /**
  * @author rajeevan
@@ -205,15 +202,12 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         
         Coordinate c=new Coordinate();
 
-        Person p = new Person(0, 0, 34, 11, Direction.d_90,c);
+      //  Person p = new Person(0, 0, 34, 11, Direction.d_90,c);
+               Person p = new Person(0, 0, Direction.d_90,ComponentsLib.RANDOM);
+
         Thread person=new Thread(p);
         person.start();
-        //CoordinateServable cs = new CoordinateServer(0,0,c);
-        
-        
-        CoordinateServable cs = new BluetoothModule("btspp://001106220300:1;authenticate=false;encrypt=false;master=false",c,this.form);
-        Thread bluetooth= new Thread(cs);
-        bluetooth.start();
+
         
     }
 }

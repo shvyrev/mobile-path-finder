@@ -20,11 +20,11 @@ public class CoordinateServer implements CoordinateServable {
     int currentX, currentY;
     private Coordinate coordinate;
 
-    public CoordinateServer(int x, int y, Coordinate coordinate) {
+    public CoordinateServer(int x, int y,Map m) {
         this.currentX = x;
         this.currentY = y;
-        this.m = ComponentsLib.map;
-        this.coordinate=coordinate;
+        this.m = m;
+        this.coordinate=ComponentsLib.coordinate;
     }
 
     public void run() {
@@ -35,7 +35,7 @@ public class CoordinateServer implements CoordinateServable {
         while (true) {
             int a = s.nextInt(100);
             int x, y;
-            if (a <= 60) {
+            if (a <= 80) {
                 x = (r.nextInt(2));
                 y = (r.nextInt(2));
             } else {
@@ -46,14 +46,14 @@ public class CoordinateServer implements CoordinateServable {
             if (x == 0 && y == 0) {
                 continue;
             }
-            System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
+            
 
             if (!m.isBlocked(currentX + x, currentY + y).booleanValue()) {
              
                     currentX += x;
                     currentY += y;
                     coordinate.setCoordinate(currentX, currentY);
-
+                    System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
                 try {
                    
                     Thread.sleep(3000);
