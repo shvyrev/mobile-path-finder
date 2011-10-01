@@ -4,10 +4,6 @@
  */
 package DataStructure;
 
-import Components.SoundModule;
-import javax.microedition.media.MediaException;
-import javax.microedition.media.Player;
-
 /**
  *
  * @author rajeevan
@@ -36,9 +32,20 @@ public class Command {
 
     public Command(int commandNo) {
         command = commandNo;
-
+    }
+    
+    public void setCommand(int commandNo){
+        if(commandNo<=16 && commandNo>=0){
+            this.command=commandNo;
+        }
+    }
+    
+    
+    public void setCommand(Command command){
+        this.command=command.getCommand();
     }
 
+    
     public String toString() {
 
         switch (command) {

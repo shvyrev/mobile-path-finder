@@ -202,11 +202,13 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         
         Coordinate c=new Coordinate();
 
-      //  Person p = new Person(0, 0, 34, 11, Direction.d_90,c);
-               Person p = new Person(0, 0, Direction.d_90,ComponentsLib.RANDOM);
-
-        Thread person=new Thread(p);
-        person.start();
+       // System.out.println(ComponentsLib.RANDOM);
+        //System.out.println(Direction.d_90);
+       Person p = new Person(0, 0,Direction.d_90,ComponentsLib.ENTC);
+       
+       
+       Thread person=new Thread(p);
+       person.start();
 
         
     }

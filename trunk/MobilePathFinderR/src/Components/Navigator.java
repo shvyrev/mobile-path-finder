@@ -14,14 +14,21 @@ import DataStructure.Direction;
 public class Navigator {
 
     Command currentCommand;
-    SoundModule sound=new SoundModule();
-    
+
+
+    public Navigator() {
+        currentCommand = ComponentsLib.command;
+
+    }
 
     public Command navigateCommand(Direction currentDirection, Direction pathDirection) {
 
         Direction difference = Direction.getDirection(currentDirection, pathDirection);
-        currentCommand = Command.convertDirection(difference);
-        sound.play_Sound(currentCommand);
+        currentCommand.setCommand(Command.convertDirection(difference));
+        ComponentsLib.f.append(currentCommand.toString());
+        synchronized(currentCommand){
+            currentCommand.notify();
+        }
         return currentCommand;
     }
 }

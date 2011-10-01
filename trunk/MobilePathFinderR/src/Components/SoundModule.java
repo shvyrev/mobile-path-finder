@@ -14,13 +14,15 @@ import javax.microedition.media.Player;
  *
  * @author rajeevan
  */
-public class SoundModule {
+public class SoundModule implements Runnable {
 
     //private VolumeControl volume;
     // private Player player;
+    private Command command;
     public static Player[] player = new Player[20];
 
-    public SoundModule() {
+    public SoundModule(Command command) {
+        this.command=command;
         initilize();
     }
 
@@ -44,6 +46,9 @@ public class SoundModule {
             player[15] = Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
             player[16] = Manager.createPlayer(getClass().getResourceAsStream("CLOSE.wav"), "audio/x-wav");
             for (int i = 0; i <= 16; i++) {
+                if(i==6){
+                    continue;
+                }
                 player[i].prefetch();
             }
         } catch (IOException ex) {
@@ -53,15 +58,30 @@ public class SoundModule {
         }
     }
 
-    public void play_Sound(Command command) {
+    public void play_Sound() {
 
         try {
+            System.out.println("playing"+command.getCommand());
             player[command.getCommand()].start();
         } catch (NullPointerException e) {
             System.out.println("null pointer exception : playing sound");
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("error on play sound");
+        }
+    }
+
+    public void run() {
+        while(true){
+        synchronized(command){
+            try {
+                command.wait();
+            } catch (InterruptedException ex) {
+                System.out.println("SoundModule: interrupted exception");
+            }
+            
+            this.play_Sound();
+        }
         }
     }
 }

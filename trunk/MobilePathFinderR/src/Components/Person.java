@@ -48,8 +48,8 @@ public class Person implements Runnable {
         this.terminalY = m.getTerminalY();
         direction = startingDir;
         way.appendStep(startX, startY);
-       // bt=new BluetoothModule(BluetoothModule.HANDHELD);
-       bt=new CoordinateServer(0, 0,m);;
+        //bt=new BluetoothModule(BluetoothModule.HANDHELD);
+       bt=new CoordinateServer(0, 0,m);
         
         
         this.map = m;
@@ -60,6 +60,9 @@ public class Person implements Runnable {
         
         Thread Bluetooth=new Thread(bt);
         Bluetooth.start();
+        
+        Thread Sound=new Thread(ComponentsLib.soundModule);
+        Sound.start();
     }
 
     public Direction getDirection() {
@@ -83,7 +86,11 @@ public class Person implements Runnable {
 
         double distance = getDistance(tempCoordinate[0], tempCoordinate[1]);
         if ((distance <= (maximumStepDist * (1 + stepDeviationFactor))) && !map.isBlocked(tempCoordinate[0], tempCoordinate[1]).booleanValue()) {
+            
+            if(distance>=maximumStepDist){
             maximumStepDist = distance;
+            }
+            
             direction = Direction.getDirection(currentX, currentY, tempCoordinate[0], tempCoordinate[1]);
             currentX = tempCoordinate[0];
             currentY = tempCoordinate[1];
@@ -122,13 +129,12 @@ public class Person implements Runnable {
         while (!(currentX==terminalX&&currentY==terminalY)) {
             try {
                 updatePosition();
-                
             } catch (WalkingDistanceError ex) {
                 ComponentsLib.f.append(ex.toString());
                 continue;
             }
             pf.findPath(currentX,currentY, terminalX, terminalY,map);
-            System.out.println(nav.navigateCommand(direction, map.pathStartingDirection()));
+          System.out.println(nav.navigateCommand(direction, map.pathStartingDirection()));
             System.out.println(this);
             //ComponentsLib.f.deleteAll();
             //ComponentsLib.f.append(this.toString());
