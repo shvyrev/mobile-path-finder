@@ -5,6 +5,7 @@
 package Components;
 
 import DataStructure.CartisianMap;
+import DataStructure.Command;
 import DataStructure.Coordinate;
 import DataStructure.Map;
 import javax.microedition.lcdui.Form;
@@ -38,6 +39,9 @@ public class ComponentsLib {
     }
    
    public static Form f;
+   
+   public static Command command=new Command(0);
+   public static SoundModule soundModule=new SoundModule(command);
    
    
    public static Coordinate coordinate=new Coordinate();
