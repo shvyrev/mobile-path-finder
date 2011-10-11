@@ -5,8 +5,8 @@
 package test;
 
 import Components.ComponentsLib;
+import Components.EventCanvas;
 import Components.Person;
-import DataStructure.Coordinate;
 import DataStructure.Direction;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
@@ -27,13 +27,14 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
      * The HelloMIDlet constructor.
      */
     public HelloMIDlet() {
+      
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
     //</editor-fold>//GEN-END:|methods|0|
     //<editor-fold defaultstate="collapsed" desc=" Generated Method: initialize ">//GEN-BEGIN:|0-initialize|0|0-preInitialize
     /**
-     * Initilizes the application.
+     * Initializes the application.
      * It is called only once when the MIDlet is started. The method is called before the <code>startMIDlet</code> method.
      */
     private void initialize() {//GEN-END:|0-initialize|0|0-preInitialize
@@ -176,8 +177,11 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         } else {
             initialize();
             startMIDlet();
-            Thread t = new Thread(this);
-            t.start();
+            ComponentsLib.keyScanner=new EventCanvas(this);
+        this.getDisplay().setCurrent(ComponentsLib.keyScanner);
+            Person p = new Person(0, 0, Direction.d_90, ComponentsLib.RANDOM);
+        Thread person = new Thread(p);
+        person.start();
         }
         midletPaused = false;
     }
@@ -197,19 +201,17 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
     }
 
     public void run() {
-        
-        ComponentsLib.f=this.form;
-        
-        Coordinate c=new Coordinate();
 
-       // System.out.println(ComponentsLib.RANDOM);
-        //System.out.println(Direction.d_90);
-       Person p = new Person(0, 0,Direction.d_90,ComponentsLib.ENTC);
-       
-       
-       Thread person=new Thread(p);
-       person.start();
-
+        
+        
+        //ComponentsLib.keyScanner.printCoordinate("keyscanner initialized & person started");
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException ex) {
+//            ex.printStackTrace();
+//        }
+        
+        
         
     }
 }

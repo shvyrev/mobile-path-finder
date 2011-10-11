@@ -4,7 +4,7 @@
  */
 package Components;
 
-import DataStructure.Command;
+import DataStructure.Commands;
 
 /**
  *
@@ -12,15 +12,20 @@ import DataStructure.Command;
  */
 public class Compass implements Runnable{
     
-    public Command currentCommand;
+    public Commands currentCommand;
+    public BluetoothModule bt;
     
-    public Compass(){
-        this.currentCommand=ComponentsLib.command;
+    public Compass(BluetoothModule bt){
+        this.currentCommand=new Commands(0);
+        ComponentsLib.soundModule.setCommand(currentCommand);
+        this.bt=bt;
     }
 
     public void run() {
-        
+            
     }
+    
+    
     
     
 }

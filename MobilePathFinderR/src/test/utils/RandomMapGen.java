@@ -21,7 +21,7 @@ public class RandomMapGen{
         for(int x=0;x<b.length;x++){
             for(int y=0;y<b[0].length;y++){
                 int nxtInt=r.nextInt(100);
-                b[x][y]=(nxtInt<=80)?Boolean.TRUE:Boolean.FALSE;
+                b[x][y]=(nxtInt<=90)?Boolean.TRUE:Boolean.FALSE;
                 
             }
         }

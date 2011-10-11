@@ -8,7 +8,7 @@ package DataStructure;
  *
  * @author rajeevan
  */
-public class Command {
+public class Commands {
 
     private static int command;
     //commands that canbe used for navigation
@@ -29,20 +29,26 @@ public class Command {
     public static final int CONFORM = 14;
     public static final int WAITING = 15;
     public static final int CLOSING = 16;
+    
+    //commands that taken from the person
+    public static final int STOPSCAN=17;
+    
 
-    public Command(int commandNo) {
+    public Commands(int commandNo) {
         command = commandNo;
     }
     
-    public void setCommand(int commandNo){
+    public synchronized void setCommand(int commandNo){
         if(commandNo<=16 && commandNo>=0){
             this.command=commandNo;
+            notify();
         }
     }
     
     
-    public void setCommand(Command command){
+    public synchronized void setCommand(Commands command){
         this.command=command.getCommand();
+        notify();
     }
 
     
@@ -84,29 +90,36 @@ public class Command {
             case 16:
                 return "CLOSING";
 
+            case 17: 
+                return "STOPSCAN";
         }
         return "STOP";
     }
 
     
     
-    public int getCommand(){
+    public synchronized int getCommand(){
+        try {
+            wait();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
         return command;
     }
 
-    public static Command convertDirection(Direction d) {
+    public static Commands convertDirection(Direction d) {
         if(d.equals(Direction.d_90)){
-            return new Command(Command.LEFT);
+            return new Commands(Commands.LEFT);
         }else if(d.equals(Direction.d_45)){
-            return new Command(Command.LLEFT);
+            return new Commands(Commands.LLEFT);
         }else if(d.equals(Direction.d_0)){
-            return new Command(Command.STRIGHT);
+            return new Commands(Commands.STRIGHT);
         }else if(d.equals(Direction.d_315)){
-            return new Command(Command.RRIGHT);
+            return new Commands(Commands.RRIGHT);
         }else if(d.equals(Direction.d_270)){
-            return new Command(Command.RIGHT);
+            return new Commands(Commands.RIGHT);
         }else{
-            return new Command(Command.BACK);
+            return new Commands(Commands.BACK);
         }
         
     }

@@ -4,7 +4,7 @@
  */
 package Components;
 
-import DataStructure.Command;
+import DataStructure.Commands;
 import DataStructure.Direction;
 
 /**
@@ -13,22 +13,8 @@ import DataStructure.Direction;
  */
 public class Navigator {
 
-    Command currentCommand;
-
-
-    public Navigator() {
-        currentCommand = ComponentsLib.command;
-
-    }
-
-    public Command navigateCommand(Direction currentDirection, Direction pathDirection) {
-
+    public Commands navigateCommand(Direction currentDirection, Direction pathDirection) {
         Direction difference = Direction.getDirection(currentDirection, pathDirection);
-        currentCommand.setCommand(Command.convertDirection(difference));
-        ComponentsLib.f.append(currentCommand.toString());
-        synchronized(currentCommand){
-            currentCommand.notify();
-        }
-        return currentCommand;
+        return Commands.convertDirection(difference);
     }
 }

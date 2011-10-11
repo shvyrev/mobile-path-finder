@@ -4,6 +4,8 @@
  */
 package DataStructure;
 
+import Components.ComponentsLib;
+
 /**
  *
  * @author rajeevan
@@ -31,7 +33,6 @@ public class Coordinate {
         this.x = x;
         this.y = y;
         updated = true;
-        System.out.println("Coordinate: x="+x+"y="+y);
         notify();
     }
 
