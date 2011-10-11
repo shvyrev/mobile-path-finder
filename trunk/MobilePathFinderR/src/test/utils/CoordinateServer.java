@@ -8,17 +8,20 @@ package test.utils;
  *
  * @author rajeevan
  */
-import Components.CoordinateServable;
+import Components.Communicatable;
 import Components.ComponentsLib;
 import DataStructure.Coordinate;
 import DataStructure.Map;
 import java.util.Random;
 
-public class CoordinateServer implements CoordinateServable {
+public class CoordinateServer implements Communicatable {
 
     Map m;
     int currentX, currentY;
     private Coordinate coordinate;
+    private int mode=INITIATE;
+    private int subMode;
+    private String btUrl=HANDHELD;
 
     public CoordinateServer(int x, int y,Map m) {
         this.currentX = x;
@@ -69,5 +72,38 @@ public class CoordinateServer implements CoordinateServable {
     }
 
     public void receiveCoordinate() {
+    }
+
+    public void changeMode(int mode) {
+       
+    }
+
+    public void changeSubMode(int mode) {
+        System.out.println("now the submode is "+mode);
+        this.subMode = mode;
+    }
+
+    public void elevatorControlFlow() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int[] get_coordinate_data() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public char receiveChar() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String receiveData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean sendExitSeq() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean senddata(String comm) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

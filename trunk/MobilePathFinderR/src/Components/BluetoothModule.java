@@ -4,85 +4,86 @@
  */
 package Components;
 
+import DataStructure.Commands;
 import DataStructure.Coordinate;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
-import javax.microedition.lcdui.Form;
 
 /**
  *
  * @author rajeevan
  */
-public class BluetoothModule implements CoordinateServable {
+public class BluetoothModule implements Communicatable {
 
-    Coordinate coordinate;
+    private Coordinate coordinate;
+    private Commands currentCommand;
+    private EventCanvas disp;
     // current bluetooth device
     private String btUrl = HANDHELD;
+    //
     // current connection
-    private int mode = INITIATE;
-    StreamConnection conn = null;
-    DataInputStream in = null;
-    DataOutputStream out = null;
-    public static final int TURNOFF = 0;
-    public static final int INITIATE = 1;
-    public static final int HAND = 2;
-    public static final int ELEV = 3;
-    public static final String HANDHELD = "btspp://001106220296:1;authenticate=false;encrypt=false;master=false";
-    public static final String ELEVATOR = "btspp://001106220300:1;authenticate=false;encrypt=false;master=false";
-    
-    //ajanthan pc:btspp://001FE1F85EB2:1;authenticate=false;encrypt=false;master=false
-    //hanaheld:btspp://001106220300:1;authenticate=false;encrypt=false;master=false
-    //extra:btspp://001106220296:1;authenticate=false;encrypt=false;master=false
-    //elevator:
-    
+    private int state = INITIATE;
+    private int mode = HAND;
+    private int subMode = IR;
+    private StreamConnection conn = null;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
 
     public BluetoothModule(String btUrl) {
         this.btUrl = btUrl;
         this.coordinate = ComponentsLib.coordinate;
-        this.f = ComponentsLib.f;
+        this.currentCommand = ComponentsLib.currentCommand;
+        this.disp = ComponentsLib.keyScanner;
     }
-    //remove after test
-    Form f;
-    //
 
     public void run() {
 
         while (true) {
-            if (mode == INITIATE) {
+            if (state == INITIATE) {
                 this.connect();
-            } else if (mode == HAND) {
-                f.append("start to receiving coordinate");
-                this.receiveCoordinate();
-            } else if (mode == ELEV) {
-            } else {
-                close();
-                break;
+            } else if (state == CONNECTED) {
+                if (mode == HAND) {
+                    disp.printAlert("receiving coordinate");
+                    this.receiveCoordinate();
+                } else if (mode == ELEV) {
+                    disp.printAlert("On Elevator Control Flow");
+                    this.elevatorControlFlow();
+                } else {
+                    close();
+                    break;
+                }
             }
         }
     }
 
     private void connect() {
-        //if(isConnected == false){  
+        this.close();
         if (btUrl == null || (btUrl.trim().compareTo("") == 0)) {
             return;
         }
         try {
-            f.deleteAll();
-            f.append("trying to connect to " + btUrl);
+            disp.printAlert("connecting.");
             conn = (StreamConnection) Connector.open(btUrl, Connector.READ_WRITE);
+            Thread.sleep(200);
+            disp.printAlert("connecting...");
             in = new DataInputStream(conn.openInputStream());
+            Thread.sleep(200);
+            disp.printAlert("connecting....");
             out = new DataOutputStream(conn.openOutputStream());
-            f.append("connected");
-            if (btUrl.equals(HANDHELD)) {
-                mode = HAND;
-                f.append("bluetooth mode: HAND");
-            } else if (btUrl.equals(ELEVATOR)) {
-                mode = ELEV;
-            }
+            Thread.sleep(200);
+            disp.printAlert("connecting......");
+            Thread.sleep(200);
+            disp.printAlert("connected");
+
+            Thread.sleep(100);
+            state = CONNECTED;
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         } catch (IOException e) {
+            disp.printAlert("BT: IOEx connection");
             close();
         }
     }
@@ -102,12 +103,11 @@ public class BluetoothModule implements CoordinateServable {
             out = null;
             conn = null;
         } catch (Throwable t) {
-            System.out.println(t);
         } finally {
             in = null;
             out = null;
             conn = null;
-            mode = INITIATE;
+            state = INITIATE;
         }
 
     }
@@ -121,11 +121,12 @@ public class BluetoothModule implements CoordinateServable {
             out.flush();
             out.close();
             out = null;
-            f.append("sent:" + comm);
+            //disp.append("sent:" + comm);
             return true;
         } catch (IOException ex) {
+            disp.printAlert("BT:IOEx");
         } catch (NullPointerException e) {
-            System.out.println(e);
+            disp.printAlert("BT:NulEx");
         }
         return false;
     }
@@ -134,89 +135,83 @@ public class BluetoothModule implements CoordinateServable {
         return this.senddata("q");
     }
 
-    public void changeMode(String Url) {
-        if (!btUrl.equals(Url)) {
-            if (Url.equals(ELEVATOR)) {
-                btUrl = ELEVATOR;
-            } else if (Url.equals(HANDHELD)) {
+    public void changeMode(int mode) {
+        if (this.mode != mode) {
+            this.mode = mode;
+            if (btUrl.equals(ELEVATOR)) {
                 btUrl = HANDHELD;
+            } else if (btUrl.equals(HANDHELD)) {
+                btUrl = ELEVATOR;
             }
-            mode = INITIATE;
+            this.state = INITIATE;
         }
+        this.sendExitSeq();
+        this.connect();
+    }
+
+    public void changeSubMode(int mode) {
+        this.subMode = mode;
     }
 
     public int[] get_coordinate_data() {
+
         char dd = 'f';
         int x = 0;
         int y = 0;
-
         String data = "";
-
-
         try {
-            //senddata("start");
-            //wait to get char 'x'
             do {
                 if (in.available() != 0) {
-                    dd = (char)in.read();
-                    f.append(String.valueOf(dd));
+                    dd = (char) in.read();
                 }
             } while (dd != 'x');
-            senddata("s");
-            //get the x coordinate and put it in to the variable x
+
+            //start to receive x coordinate value
+            //disp.printCoordinate("receiving x");
             while (true) {
                 if (in.available() != 0) {
-
-                    dd = (char)in.read();
+                    dd = (char) in.read();
                     if (dd != 'e') {
-                        data=data.concat(String.valueOf(dd));
-                        f.append("concat:"+data);
+                        data = data.concat(String.valueOf(dd));
                     } else {
                         break;
                     }
                 }
             }
-
-            try{
             x = Integer.valueOf(data).intValue();
-            }catch(NumberFormatException e){
-                f.append("number format exception "+data);
-            }
-            f.append("x received:" + x);
+            //disp.printCoordinate("x:" + data);
+
             data = "";
-
-
-            //get the y coordinate and put it in to the variable y;
-
             do {
                 if (in.available() != 0) {
-                    dd = (char)in.read();
+                    dd = (char) in.read();
                 }
             } while (dd != 'y');
-            
+
+//start to receive x coordinate value
+            //disp.printCoordinate("receiving y");
             while (true) {
                 if (in.available() != 0) {
-
-                    dd = (char)in.read();
+                    dd = (char) in.read();
                     if (dd != 'e') {
-                        data=data.concat(String.valueOf(dd));
-                    } else {
+                        data = data.concat(String.valueOf(dd));
+                    } else if (dd == 'e') {
                         break;
                     }
                 }
             }
 
             y = Integer.valueOf(data).intValue();
-            f.append("y received:" + y);
-            data = "";
+            //disp.printCoordinate("y" + data);
 
+        } catch (NumberFormatException e) {
+            disp.printAlert("BT:NFEx");
         } catch (IOException ex) {
-            f.append("exception on reading data");
-            System.out.println(ex);
+            disp.printAlert("BT:IOEx");
         }
 
 
-        f.append("the received  x:" + x + " y:" + y);
+
 
         int posi[] = new int[2];
         posi[0] = x;
@@ -248,16 +243,63 @@ public class BluetoothModule implements CoordinateServable {
             }
         }
 
-        f.append("the received data:" + data);
+        //disp.append("the received data:" + data);
         return data;
     }
 
+    public char receiveChar() {
+        int num;
+        char dd;
+        while (true) {
+            try {
+                if (in.available() != 0) {
+                    num = in.read();
+                    dd = (char) num;
+                    break;
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
+        return dd;
+
+    }
+
     public void receiveCoordinate() {
-        int[] coord = this.get_coordinate_data();
-        this.coordinate.setCoordinate(coord[0], coord[1]);
-        f.append("x=" + coord[0] + "y=" + coord[1] + "return statument from person:");
+
+            int[] coord = this.get_coordinate_data();
+            this.coordinate.setCoordinate(coord[0], coord[1]);
+
     }
 
     public void elevatorControlFlow() {
+
+        if (subMode == IR) {
+            char c;
+            this.sendOrientationRequest();
+            while (subMode == IR) {
+                c = receiveChar();
+
+                if (c == 'l') {
+                    currentCommand.setCommand(Commands.LEFTIR);
+
+                    disp.printCoordinate("LEFTIR");
+
+                } else if (c == 'r') {
+                    currentCommand.setCommand(Commands.RIGHTIR);
+                    disp.printCoordinate("RIGHTIR");
+                }
+            }
+
+        } else if (subMode == UPDOWN) {
+        } else if (subMode == CLOSEDOOR) {
+        }
+
+
+
+    }
+
+    private void sendOrientationRequest() {
+        this.senddata("s");
     }
 }
