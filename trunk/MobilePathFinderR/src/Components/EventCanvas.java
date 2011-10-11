@@ -50,7 +50,6 @@ public class EventCanvas extends Canvas implements Runnable {
 
     public  void print(String s) {
         displayString = s;
-        
         repaint();
     }
     public void append(String s){

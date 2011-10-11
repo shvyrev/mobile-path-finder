@@ -14,7 +14,7 @@ import javax.microedition.lcdui.*;
 /**
  * @author rajeevan
  */
-public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
+public class HelloMIDlet extends MIDlet implements CommandListener {
 
     private boolean midletPaused = false;
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
@@ -27,7 +27,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
      * The HelloMIDlet constructor.
      */
     public HelloMIDlet() {
-      
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -177,11 +176,11 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
         } else {
             initialize();
             startMIDlet();
-            ComponentsLib.keyScanner=new EventCanvas(this);
-        this.getDisplay().setCurrent(ComponentsLib.keyScanner);
+            ComponentsLib.keyScanner = new EventCanvas(this);
+            this.getDisplay().setCurrent(ComponentsLib.keyScanner);
             Person p = new Person(0, 0, Direction.d_90, ComponentsLib.RANDOM);
-        Thread person = new Thread(p);
-        person.start();
+            Thread person = new Thread(p);
+            person.start();
         }
         midletPaused = false;
     }
@@ -198,20 +197,5 @@ public class HelloMIDlet extends MIDlet implements CommandListener, Runnable {
      * @param unconditional if true, then the MIDlet has to be unconditionally terminated and all resources has to be released.
      */
     public void destroyApp(boolean unconditional) {
-    }
-
-    public void run() {
-
-        
-        
-        //ComponentsLib.keyScanner.printCoordinate("keyscanner initialized & person started");
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException ex) {
-//            ex.printStackTrace();
-//        }
-        
-        
-        
     }
 }

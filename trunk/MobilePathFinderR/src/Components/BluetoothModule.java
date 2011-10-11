@@ -46,7 +46,7 @@ public class BluetoothModule implements Communicatable {
                 this.connect();
             } else if (state == CONNECTED) {
                 if (mode == HAND) {
-                    disp.printAlert("receiving coordinate");
+                    disp.printAlert("Receiving Coordinate");
                     this.receiveCoordinate();
                 } else if (mode == ELEV) {
                     disp.printAlert("On Elevator Control Flow");
@@ -61,23 +61,12 @@ public class BluetoothModule implements Communicatable {
 
     private void connect() {
         this.close();
-        if (btUrl == null || (btUrl.trim().compareTo("") == 0)) {
-            return;
-        }
         try {
             disp.printAlert("connecting.");
             conn = (StreamConnection) Connector.open(btUrl, Connector.READ_WRITE);
-            Thread.sleep(200);
-            disp.printAlert("connecting...");
             in = new DataInputStream(conn.openInputStream());
-            Thread.sleep(200);
-            disp.printAlert("connecting....");
             out = new DataOutputStream(conn.openOutputStream());
-            Thread.sleep(200);
-            disp.printAlert("connecting......");
-            Thread.sleep(200);
             disp.printAlert("connected");
-
             Thread.sleep(100);
             state = CONNECTED;
         } catch (InterruptedException ex) {
@@ -86,6 +75,7 @@ public class BluetoothModule implements Communicatable {
             disp.printAlert("BT: IOEx connection");
             close();
         }
+
     }
 
     private void close() {
