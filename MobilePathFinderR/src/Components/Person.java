@@ -142,33 +142,21 @@ public class Person implements Runnable {
         while (!(currentX == terminalX && currentY == terminalY)) {
             //System.out.println("per:("+currentX+","+currentY+")");
             try {
-                ComponentsLib.keyScanner.printMessage("Per:updating...");
-                
-                    Thread.sleep(100);
-               
-                
                 updatePosition();
-                ComponentsLib.keyScanner.printCoordinate("("+currentX+","+currentY+")");
-                Thread.sleep(100);
-               ComponentsLib.keyScanner.printMessage("Per:updated");
-               Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
             } catch (WalkingDistanceError ex) {
                 ComponentsLib.keyScanner.printAlert("Per: large Distance");
                 continue;
             }
-            //pf.findPath(currentX, currentY, terminalX, terminalY, map);
-            //command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
-            //ComponentsLib.keyScanner.printMessage(command.toString());
-            //System.out.println(this);
-            //ComponentsLib.keyScanner.print(this.toString());
+            pf.findPath(currentX, currentY, terminalX, terminalY, map);
+            command=nav.navigateCommand(direction, map.pathStartingDirection());
+            //ComponentsLib.currentCommand.setCommand(command);
+            ComponentsLib.keyScanner.print(command.toString()+"(" + currentX + "," + currentY + ")");
+           
         }
         ComponentsLib.keyScanner.printAlert("DEST ARRIVED");
-
         command.setCommand(Commands.ARRIVED);
 
-        //System.out.println("Destination Reached");
+        ComponentsLib.soundModule.changeMode(SoundModule.ORIENTATION);
 
         //start to aline the person in front of the elevator
         bt.changeSubMode(BluetoothModule.IR);
@@ -182,10 +170,11 @@ public class Person implements Runnable {
 
         while (true) {
             pressedKey = ComponentsLib.pressedKey.getKey();
-            if (pressedKey == EventCanvas.UP) {
+            if (pressedKey == EventCanvas.U) {
+                
                 ComponentsLib.keyScanner.print("Up selected");
                 break;
-            } else if (pressedKey == EventCanvas.DOWN) {
+            } else if (pressedKey == EventCanvas.D) {
                 ComponentsLib.keyScanner.print("Down selected");
                 break;
             }
