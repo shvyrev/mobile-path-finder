@@ -6,6 +6,7 @@ package Components;
 
 import DataStructure.Commands;
 import DataStructure.Coordinate;
+import Exceptions.InvaliedData;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -46,10 +47,10 @@ public class BluetoothModule implements Communicatable {
                 this.connect();
             } else if (state == CONNECTED) {
                 if (mode == HAND) {
-                    disp.printAlert("Receiving Coordinate");
+                    disp.printMessage("Receiving Coordinate");
                     this.receiveCoordinate();
                 } else if (mode == ELEV) {
-                    disp.printAlert("On Elevator Control Flow");
+                    disp.printMessage("On Elevator Control Flow");
                     this.elevatorControlFlow();
                 } else {
                     close();
@@ -62,20 +63,26 @@ public class BluetoothModule implements Communicatable {
     private void connect() {
         this.close();
         try {
-            disp.printAlert("connecting.");
+            disp.printMessage("connecting.");
             conn = (StreamConnection) Connector.open(btUrl, Connector.READ_WRITE);
             in = new DataInputStream(conn.openInputStream());
             out = new DataOutputStream(conn.openOutputStream());
-            disp.printAlert("connected");
-            Thread.sleep(100);
             state = CONNECTED;
+            disp.printMessage("connected");
+            Thread.sleep(100);
+            
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } catch (IOException e) {
-            disp.printAlert("BT: IOEx connection");
+            disp.printException("BT: IOEx connection");
             close();
         }
 
+    }
+
+    public void turnOff() {
+        this.close();
+        state = TURNOFF;
     }
 
     private void close() {
@@ -114,9 +121,9 @@ public class BluetoothModule implements Communicatable {
             //disp.append("sent:" + comm);
             return true;
         } catch (IOException ex) {
-            disp.printAlert("BT:IOEx");
+            disp.printException("BT:IOEx");
         } catch (NullPointerException e) {
-            disp.printAlert("BT:NulEx");
+            disp.printException("BT:NulEx");
         }
         return false;
     }
@@ -136,72 +143,61 @@ public class BluetoothModule implements Communicatable {
             this.state = INITIATE;
         }
         this.sendExitSeq();
-        this.connect();
     }
 
-    public void changeSubMode(int mode) {
-        this.subMode = mode;
+    public void changeSubMode(int submode) {
+        this.subMode = submode;
     }
 
-    public int[] get_coordinate_data() {
-
+    public int[] get_coordinate_data() throws NumberFormatException, IOException,InvaliedData {
         char dd = 'f';
         int x = 0;
         int y = 0;
         String data = "";
-        try {
-            do {
-                if (in.available() != 0) {
-                    dd = (char) in.read();
-                }
-            } while (dd != 'x');
 
-            //start to receive x coordinate value
-            //disp.printCoordinate("receiving x");
-            while (true) {
-                if (in.available() != 0) {
-                    dd = (char) in.read();
-                    if (dd != 'e') {
-                        data = data.concat(String.valueOf(dd));
-                    } else {
-                        break;
-                    }
+        do{
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while(dd!='x') ;
+        
+
+        //start to receive x coordinate value
+        //disp.printCoordinate("receiving x");
+        while (true) {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+                if (dd != 'e') {
+                    data = data.concat(String.valueOf(dd));
+                } else {
+                    break;
                 }
             }
-            x = Integer.valueOf(data).intValue();
-            //disp.printCoordinate("x:" + data);
+        }
+        x = Integer.valueOf(data).intValue();
+        //disp.printCoordinate("x:" + data);
 
-            data = "";
-            do {
-                if (in.available() != 0) {
-                    dd = (char) in.read();
-                }
-            } while (dd != 'y');
+        data = "";
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'y');
 
 //start to receive x coordinate value
-            //disp.printCoordinate("receiving y");
-            while (true) {
-                if (in.available() != 0) {
-                    dd = (char) in.read();
-                    if (dd != 'e') {
-                        data = data.concat(String.valueOf(dd));
-                    } else if (dd == 'e') {
-                        break;
-                    }
+        //disp.printCoordinate("receiving y");
+        while (true) {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+                if (dd != 'e') {
+                    data = data.concat(String.valueOf(dd));
+                } else if (dd == 'e') {
+                    break;
                 }
             }
-
-            y = Integer.valueOf(data).intValue();
-            //disp.printCoordinate("y" + data);
-
-        } catch (NumberFormatException e) {
-            disp.printAlert("BT:NFEx");
-        } catch (IOException ex) {
-            disp.printAlert("BT:IOEx");
         }
-
-
-
+        y = Integer.valueOf(data).intValue();
+        //disp.printCoordinate("y" + data);
 
         int posi[] = new int[2];
         posi[0] = x;
@@ -229,7 +225,7 @@ public class BluetoothModule implements Communicatable {
                     }
                 }
             } catch (IOException ex) {
-                System.out.println(ex);
+                disp.printException("BT:IOEx receive Data");
             }
         }
 
@@ -248,7 +244,7 @@ public class BluetoothModule implements Communicatable {
                     break;
                 }
             } catch (IOException ex) {
-                System.out.println(ex);
+                disp.printException("BT:IOEx receive chr");
             }
         }
         return dd;
@@ -256,25 +252,29 @@ public class BluetoothModule implements Communicatable {
     }
 
     public void receiveCoordinate() {
-
+        try {
             int[] coord = this.get_coordinate_data();
             this.coordinate.setCoordinate(coord[0], coord[1]);
+        } catch (NumberFormatException e) {
+            disp.printException("BT:NFEx");
+        } catch (IOException ex) {
+            disp.printException("BT:IOEx");
+        }catch(InvaliedData ex){
+            disp.printException("BT:InvalidData");
+        }
+
 
     }
 
     public void elevatorControlFlow() {
-
         if (subMode == IR) {
             char c;
             this.sendOrientationRequest();
             while (subMode == IR) {
                 c = receiveChar();
-
                 if (c == 'l') {
                     currentCommand.setCommand(Commands.LEFTIR);
-
                     disp.printCoordinate("LEFTIR");
-
                 } else if (c == 'r') {
                     currentCommand.setCommand(Commands.RIGHTIR);
                     disp.printCoordinate("RIGHTIR");
@@ -284,9 +284,6 @@ public class BluetoothModule implements Communicatable {
         } else if (subMode == UPDOWN) {
         } else if (subMode == CLOSEDOOR) {
         }
-
-
-
     }
 
     private void sendOrientationRequest() {

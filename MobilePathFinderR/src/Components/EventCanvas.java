@@ -71,7 +71,7 @@ public class EventCanvas extends Canvas implements Runnable {
     public  void printMessage(String s){
         this.print(s,1);
     }
-    public void printAlert(String s){
+    public void printException(String s){
         this.print(s,2);
     }
 

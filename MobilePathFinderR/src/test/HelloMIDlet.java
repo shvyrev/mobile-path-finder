@@ -15,7 +15,7 @@ import javax.microedition.lcdui.*;
  * @author rajeevan
  */
 public class HelloMIDlet extends MIDlet implements CommandListener {
-
+    Person p;
     private boolean midletPaused = false;
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private Command exitCommand;
@@ -163,6 +163,7 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
     public void exitMIDlet() {
         switchDisplayable(null, null);
         destroyApp(true);
+        p.exitSystem();
         notifyDestroyed();
     }
 
@@ -178,7 +179,7 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
             startMIDlet();
             ComponentsLib.keyScanner = new EventCanvas(this);
             this.getDisplay().setCurrent(ComponentsLib.keyScanner);
-            Person p = new Person(0, 0, Direction.d_90, ComponentsLib.RANDOM);
+            p = new Person(0, 0, Direction.d_90, ComponentsLib.RANDOM);
             Thread person = new Thread(p);
             person.start();
         }

@@ -39,8 +39,6 @@ public interface Communicatable extends Runnable {
 
     void elevatorControlFlow();
 
-    int[] get_coordinate_data();
-
     char receiveChar();
 
     void receiveCoordinate();
@@ -52,4 +50,6 @@ public interface Communicatable extends Runnable {
     boolean sendExitSeq();
 
     boolean senddata(String comm);
+    
+    public void turnOff();
 }

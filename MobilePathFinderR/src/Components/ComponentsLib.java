@@ -43,6 +43,7 @@ public class ComponentsLib {
         
        pressedKey=new Key();
        currentCommand=new Commands(0);
+       
        soundModule=new SoundModule();
        
        coordinate=new Coordinate();
