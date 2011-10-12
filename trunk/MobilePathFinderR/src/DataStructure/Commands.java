@@ -4,6 +4,8 @@
  */
 package DataStructure;
 
+import Components.ComponentsLib;
+
 /**
  *
  * @author rajeevan
@@ -29,29 +31,26 @@ public class Commands {
     public static final int CONFORM = 14;
     public static final int WAITING = 15;
     public static final int CLOSING = 16;
-    
     //commands that taken from the person
-    public static final int STOPSCAN=17;
-    
+    public static final int STOPSCAN = 17;
 
     public Commands(int commandNo) {
         command = commandNo;
     }
-    
-    public synchronized void setCommand(int commandNo){
-        if(commandNo<=16 && commandNo>=0){
-            this.command=commandNo;
+
+    public synchronized void setCommand(int commandNo) {
+        if (commandNo <= 16 && commandNo >= 0) {
+            this.command = commandNo;
             notify();
         }
     }
-    
-    
-    public synchronized void setCommand(Commands command){
-        this.command=command.getCommand();
+
+    public synchronized void setCommand(Commands command) {
+        this.command = command.getCommand();
         notify();
+
     }
 
-    
     public String toString() {
 
         switch (command) {
@@ -90,37 +89,31 @@ public class Commands {
             case 16:
                 return "CLOSING";
 
-            case 17: 
+            case 17:
                 return "STOPSCAN";
         }
         return "STOP";
     }
 
-    
-    
-    public synchronized int getCommand(){
-        try {
-            wait();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+    public int getCommand() {
+
         return command;
     }
 
     public static Commands convertDirection(Direction d) {
-        if(d.equals(Direction.d_90)){
+        if (d.equals(Direction.d_90)) {
             return new Commands(Commands.LEFT);
-        }else if(d.equals(Direction.d_45)){
+        } else if (d.equals(Direction.d_45)) {
             return new Commands(Commands.LLEFT);
-        }else if(d.equals(Direction.d_0)){
+        } else if (d.equals(Direction.d_0)) {
             return new Commands(Commands.STRIGHT);
-        }else if(d.equals(Direction.d_315)){
+        } else if (d.equals(Direction.d_315)) {
             return new Commands(Commands.RRIGHT);
-        }else if(d.equals(Direction.d_270)){
+        } else if (d.equals(Direction.d_270)) {
             return new Commands(Commands.RIGHT);
-        }else{
+        } else {
             return new Commands(Commands.BACK);
         }
-        
+
     }
 }

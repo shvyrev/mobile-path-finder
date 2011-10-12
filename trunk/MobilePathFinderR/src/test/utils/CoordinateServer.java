@@ -87,9 +87,6 @@ public class CoordinateServer implements Communicatable {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public int[] get_coordinate_data() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     public char receiveChar() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -104,6 +101,10 @@ public class CoordinateServer implements Communicatable {
     }
 
     public boolean senddata(String comm) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void turnOff() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

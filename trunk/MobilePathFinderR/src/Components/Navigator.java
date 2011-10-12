@@ -16,5 +16,6 @@ public class Navigator {
     public Commands navigateCommand(Direction currentDirection, Direction pathDirection) {
         Direction difference = Direction.getDirection(currentDirection, pathDirection);
         return Commands.convertDirection(difference);
+        
     }
 }

@@ -12,6 +12,8 @@ import DataStructure.Coordinate;
 import DataStructure.Direction;
 import DataStructure.Map;
 import DataStructure.Path;
+import Exceptions.IllegalCoordinate;
+import Exceptions.SameCoordinate;
 import Exceptions.WalkingDistanceError;
 import test.utils.CoordinateServer;
 
@@ -44,6 +46,8 @@ public class Person implements Runnable {
     private Navigator nav;
     //helps to get coordinate and help to call lift
     private Communicatable bt;
+    //display
+    EventCanvas disp;
     //properties of person
     //**************************************************
     private double maximumStepDist = 2;
@@ -63,6 +67,8 @@ public class Person implements Runnable {
         way.appendStep(startX, startY);
         bt = new BluetoothModule(BluetoothModule.HANDHELD);
         //bt = new CoordinateServer(0, 0, m);
+        disp = ComponentsLib.keyScanner;
+
 
         this.map = m;
         this.pf = new AStarPathFinder(map.getHeight() * map.getWidth(), new DirectHeuristicCost(), map.getWidth(), map.getHeight());
@@ -93,25 +99,46 @@ public class Person implements Runnable {
         this.stepDeviationFactor = stepDeviationFactor;
     }
 
-    public void updatePosition() throws WalkingDistanceError {
+    public void updatePosition() throws WalkingDistanceError, IllegalCoordinate, SameCoordinate {
+        //blocked
         int[] tempCoordinate = receivedCoordinate.getCoordinate();
-
-        double distance = getDistance(tempCoordinate[0], tempCoordinate[1]);
-        if ((distance <= (maximumStepDist * (1 + stepDeviationFactor))) && !map.isBlocked(tempCoordinate[0], tempCoordinate[1]).booleanValue()) {
-
-            if (distance >= maximumStepDist) {
-                maximumStepDist = distance;
-            }
-
-            direction = Direction.getDirection(currentX, currentY, tempCoordinate[0], tempCoordinate[1]);
-            currentX = tempCoordinate[0];
-            currentY = tempCoordinate[1];
-            this.way.appendStep(currentX, currentY);
-
+        if ((tempCoordinate[0] == currentX && tempCoordinate[1] == currentY)) {
+            throw new SameCoordinate();
+        } else if (map.isBlocked(tempCoordinate[0], tempCoordinate[1]).booleanValue()) {
+            throw new IllegalCoordinate();
         } else {
-            System.out.println("Person: Illegal coordinate arrived");
-            throw new WalkingDistanceError();
+            double distance = getDistance(tempCoordinate[0], tempCoordinate[1]);
+            if ((distance <= (maximumStepDist * (1 + stepDeviationFactor)))) {
+
+                if (distance >= maximumStepDist) {
+                    maximumStepDist = distance;
+                }
+                direction = Direction.getDirection(currentX, currentY, tempCoordinate[0], tempCoordinate[1]);
+                currentX = tempCoordinate[0];
+                currentY = tempCoordinate[1];
+                this.way.appendStep(currentX, currentY);
+
+            } else {
+                throw new WalkingDistanceError();
+            }
         }
+
+//
+//        double distance = getDistance(tempCoordinate[0], tempCoordinate[1]);
+//        if ((distance <= (maximumStepDist * (1 + stepDeviationFactor))) && !map.isBlocked(tempCoordinate[0], tempCoordinate[1]).booleanValue()) {
+//
+//            if (distance >= maximumStepDist) {
+//                maximumStepDist = distance;
+//            }
+//            direction = Direction.getDirection(currentX, currentY, tempCoordinate[0], tempCoordinate[1]);
+//            currentX = tempCoordinate[0];
+//            currentY = tempCoordinate[1];
+//            this.way.appendStep(currentX, currentY);
+//
+//        } else {
+//
+//            throw new WalkingDistanceError();
+//        }
     }
 
     private double getDistance(int x, int y) {
@@ -138,48 +165,65 @@ public class Person implements Runnable {
     }
 
     public void run() {
+        
+            
+            //navigation part:
+            while (true) {
+                try {
+                    updatePosition();
+                    if ((currentX == terminalX && currentY == terminalY)) {
+                        disp.printCoordinate("DEST ARRIVED");
+                        command.setCommand(Commands.ARRIVED);
+                        break;
+                    }
+                    pf.findPath(currentX, currentY, terminalX, terminalY, map);
+                    ComponentsLib.currentCommand.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
+                    disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
+                } catch (WalkingDistanceError ex) {
+                    disp.printException("unbelievable step length");
+                } catch (IllegalCoordinate ex) {
+                    disp.printException("illegal coordinate");
+                } catch (SameCoordinate ex) {
+                    disp.printException("same coordinate arrived");
+                }
 
-        while (!(currentX == terminalX && currentY == terminalY)) {
-            //System.out.println("per:("+currentX+","+currentY+")");
-            try {
-                updatePosition();
-            } catch (WalkingDistanceError ex) {
-                ComponentsLib.keyScanner.printAlert("Per: large Distance");
-                continue;
             }
-            pf.findPath(currentX, currentY, terminalX, terminalY, map);
-            command=nav.navigateCommand(direction, map.pathStartingDirection());
-            //ComponentsLib.currentCommand.setCommand(command);
-            ComponentsLib.keyScanner.print(command.toString()+"(" + currentX + "," + currentY + ")");
-           
-        }
-        ComponentsLib.keyScanner.printAlert("DEST ARRIVED");
-        command.setCommand(Commands.ARRIVED);
-
-        ComponentsLib.soundModule.changeMode(SoundModule.ORIENTATION);
-
-        //start to aline the person in front of the elevator
-        bt.changeSubMode(BluetoothModule.IR);
-        bt.changeMode(BluetoothModule.ELEV);
-
-        int pressedKey = ComponentsLib.pressedKey.getKey();
-        bt.changeSubMode(BluetoothModule.UPDOWN);
-
-        ComponentsLib.keyScanner.print("Select Up or Down");
 
 
-        while (true) {
-            pressedKey = ComponentsLib.pressedKey.getKey();
-            if (pressedKey == EventCanvas.U) {
+            //start to aline the person in front of the elevator
+            bt.changeSubMode(BluetoothModule.IR);
+            bt.changeMode(BluetoothModule.ELEV);
+           // Thread.sleep(500);
+            ComponentsLib.currentCommand.setCommand(Commands.SCAN);
+            int pressedKey = ComponentsLib.pressedKey.getKey();
+            bt.changeSubMode(BluetoothModule.UPDOWN);
+
+            disp.printCoordinate("Select Up or Down");
+            try{
+            Thread.sleep(500);
+            }catch(InterruptedException ex){
                 
-                ComponentsLib.keyScanner.print("Up selected");
-                break;
-            } else if (pressedKey == EventCanvas.D) {
-                ComponentsLib.keyScanner.print("Down selected");
-                break;
             }
-        }
+            ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
+            
+            while (true) {
+                pressedKey = ComponentsLib.pressedKey.getKey();
+                if (pressedKey == EventCanvas.U) {
+                    ComponentsLib.currentCommand.setCommand(Commands.UP);
+                    disp.printCoordinate("Up selected");
+                    break;
+                } else if (pressedKey == EventCanvas.D) {
+                    ComponentsLib.currentCommand.setCommand(Commands.DOWN);
+                    disp.printCoordinate("Down selected");
+                    break;
+                }
+            }
+//        } catch (InterruptedException ex) {
+//            ex.printStackTrace();
+//        }
+    }
 
-
+    public void exitSystem() {
+        bt.turnOff();
     }
 }
