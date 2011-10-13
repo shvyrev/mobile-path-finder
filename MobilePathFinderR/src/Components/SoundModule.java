@@ -84,8 +84,8 @@ public class SoundModule implements Runnable {
                 }
 
 
-                player[14] = Manager.createPlayer(getClass().getResourceAsStream("FINISH.wav"), "audio/x-wav");
-                player[15] = Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
+                player[14] = Manager.createPlayer(getClass().getResourceAsStream("WAIT.wav"), "audio/x-wav");
+                player[15] = Manager.createPlayer(getClass().getResourceAsStream("STEPIN.wav"), "audio/x-wav");
                 player[16] = Manager.createPlayer(getClass().getResourceAsStream("CLOSE.wav"), "audio/x-wav");
                 for (int i = 11; i <= 16; i++) {
                     player[i].prefetch();
