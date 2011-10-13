@@ -25,7 +25,7 @@ public class ComponentsLib {
    public static SoundModule soundModule;
    
    public static Coordinate coordinate;
-    public final static Map ENTC;
+    public  static Map ENTC;
     public final static Map RANDOM;
     
     

@@ -22,7 +22,7 @@ public class Coordinate {
             try {
                 wait();
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                
             }
         }
         updated = false;    
