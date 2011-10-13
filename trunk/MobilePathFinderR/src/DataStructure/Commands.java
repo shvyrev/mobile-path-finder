@@ -48,7 +48,6 @@ public class Commands {
     public synchronized void setCommand(Commands command) {
         this.command = command.getCommand();
         notify();
-
     }
 
     public String toString() {
@@ -96,7 +95,6 @@ public class Commands {
     }
 
     public int getCommand() {
-
         return command;
     }
 
@@ -114,6 +112,5 @@ public class Commands {
         } else {
             return new Commands(Commands.BACK);
         }
-
     }
 }

@@ -34,7 +34,7 @@ public class SoundModule implements Runnable {
 
     private void initilize() {
         initialized = false;
-        ComponentsLib.keyScanner.printException("Sound:INITIALIZED");
+        ComponentsLib.keyScanner.printException("Sound:INITIALIZING");
         try {
             if (mode == NAVIGATION) {
                 player[0] = Manager.createPlayer(getClass().getResourceAsStream("LEFT.wav"), "audio/x-wav");
@@ -44,7 +44,8 @@ public class SoundModule implements Runnable {
                 player[4] = Manager.createPlayer(getClass().getResourceAsStream("RIGHT.wav"), "audio/x-wav");
                 player[5] = Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
                 player[7] = Manager.createPlayer(getClass().getResourceAsStream("ARRIVED.wav"), "audio/x-wav");
-                for (int i = 0; i <= 7; i++) {
+                player[8] = Manager.createPlayer(getClass().getResourceAsStream("SCAN.wav"), "audio/x-wav");
+                for (int i = 0; i <= 8; i++) {
                     if (i == 6) {
                         continue;
                     }
@@ -54,15 +55,20 @@ public class SoundModule implements Runnable {
                 mode = ORIENTATION;
 
             } else if (mode == ORIENTATION) {
-                for (int i = 0; i <= 5; i++) {
+                for (int i = 0; i <= 7; i++) {
+                    if (i == 6) {
+                        continue;
+                    }
                     player[i].deallocate();
                 }
 
-                player[8] = Manager.createPlayer(getClass().getResourceAsStream("SCAN.wav"), "audio/x-wav");
                 player[9] = Manager.createPlayer(getClass().getResourceAsStream("L.wav"), "audio/x-wav");
                 player[10] = Manager.createPlayer(getClass().getResourceAsStream("R.wav"), "audio/x-wav");
                 player[11] = Manager.createPlayer(getClass().getResourceAsStream("SELECT.wav"), "audio/x-wav");
-                for (int i = 8; i <= 11; i++) {
+                player[12] = Manager.createPlayer(getClass().getResourceAsStream("UP.wav"), "audio/x-wav");
+                player[13] = Manager.createPlayer(getClass().getResourceAsStream("DOWN.wav"), "audio/x-wav");
+
+                for (int i = 9; i <= 13; i++) {
                     player[i].prefetch();
                 }
 
@@ -76,9 +82,8 @@ public class SoundModule implements Runnable {
                     }
                     player[i].deallocate();
                 }
-                
-                player[12] = Manager.createPlayer(getClass().getResourceAsStream("UP.wav"), "audio/x-wav");
-                player[13] = Manager.createPlayer(getClass().getResourceAsStream("DOWN.wav"), "audio/x-wav");
+
+
                 player[14] = Manager.createPlayer(getClass().getResourceAsStream("FINISH.wav"), "audio/x-wav");
                 player[15] = Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
                 player[16] = Manager.createPlayer(getClass().getResourceAsStream("CLOSE.wav"), "audio/x-wav");
@@ -109,16 +114,22 @@ public class SoundModule implements Runnable {
             } catch (InterruptedException ex) {
             }
         }
-//        try {
-//            player[commandNo].stop();
-//        } catch (MediaException ex) {
-//            ComponentsLib.keyScanner.printException("Sound:MediaEx on stopping");
-//        }
+
+        //seems not working
+        
+        //check weather previous one finished playing
+        if (player[commandNo].getState() == Player.STARTED) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+            }
+        }
         //commandNo should be updated after the command updated and notified
         commandNo = command.getCommand();
         try {
-            if(initialized){
-            player[commandNo].start();
+            if (initialized) {
+
+                player[commandNo].start();
             }
         } catch (MediaException ex) {
             ComponentsLib.keyScanner.printException("Sound:MediaEx on playing");
@@ -126,12 +137,12 @@ public class SoundModule implements Runnable {
             ComponentsLib.keyScanner.printException("Sound:NullEx on playing");
         }
 
-        if (commandNo == 7) {
+        if (commandNo == 8) {
             initilize();
-            ComponentsLib.keyScanner.printMessage("Sound:mode:-ORIENTATION");
-        } else if (commandNo == 11) {
+            ComponentsLib.keyScanner.printException("Sound:ORI_INITIALIZED");
+        } else if (commandNo == 12||commandNo==13) {
             initilize();
-            ComponentsLib.keyScanner.printMessage("Sound:mode-STEPIN");
+            ComponentsLib.keyScanner.printException("Sound:STEP_INITIALIZED");
         }
     }
 

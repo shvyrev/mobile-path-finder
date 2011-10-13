@@ -4,6 +4,7 @@
  */
 package Components;
 
+import DataStructure.CartisianMap;
 import DataStructure.Commands;
 import DataStructure.Coordinate;
 import Exceptions.InvaliedData;
@@ -32,6 +33,7 @@ public class BluetoothModule implements Communicatable {
     private StreamConnection conn = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
+    private boolean isMapInitialized = true;
 
     public BluetoothModule(String btUrl) {
         this.btUrl = btUrl;
@@ -45,12 +47,21 @@ public class BluetoothModule implements Communicatable {
         while (true) {
             if (state == INITIATE) {
                 this.connect();
+                
             } else if (state == CONNECTED) {
                 if (mode == HAND) {
+                    if (!isMapInitialized) {
+                        try {
+                            getMap();
+                        } catch (Exception e) {
+                        }
+                        break;
+                    }
                     disp.printMessage("Receiving Coordinate");
                     this.receiveCoordinate();
                 } else if (mode == ELEV) {
                     disp.printMessage("On Elevator Control Flow");
+                     
                     this.elevatorControlFlow();
                 } else {
                     close();
@@ -61,6 +72,7 @@ public class BluetoothModule implements Communicatable {
     }
 
     private void connect() {
+        boolean a;
         this.close();
         try {
             disp.printMessage("connecting.");
@@ -70,14 +82,15 @@ public class BluetoothModule implements Communicatable {
             state = CONNECTED;
             disp.printMessage("connected");
             Thread.sleep(100);
-            
+            if(mode==ELEV){
+                currentCommand.setCommand(Commands.SCAN);
+            }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            
         } catch (IOException e) {
-            disp.printException("BT: IOEx connection");
+            disp.printMessage("BT: IOEx connection");
             close();
         }
-
     }
 
     public void turnOff() {
@@ -121,9 +134,9 @@ public class BluetoothModule implements Communicatable {
             //disp.append("sent:" + comm);
             return true;
         } catch (IOException ex) {
-            disp.printException("BT:IOEx");
+            disp.printMessage("BT:IOEx");
         } catch (NullPointerException e) {
-            disp.printException("BT:NulEx");
+            disp.printMessage("BT:NulEx");
         }
         return false;
     }
@@ -147,20 +160,25 @@ public class BluetoothModule implements Communicatable {
 
     public void changeSubMode(int submode) {
         this.subMode = submode;
+        if(submode==UPDOWN){
+           this.sendOrientationStopCommand();
+        }
     }
 
-    public int[] get_coordinate_data() throws NumberFormatException, IOException,InvaliedData {
+    public int[] get_coordinate_data() throws NumberFormatException, IOException, InvaliedData {
+
         char dd = 'f';
         int x = 0;
         int y = 0;
         String data = "";
 
-        do{
+        do {
             if (in.available() != 0) {
                 dd = (char) in.read();
+
             }
-        } while(dd!='x') ;
-        
+        } while (dd != 'x');
+
 
         //start to receive x coordinate value
         //disp.printCoordinate("receiving x");
@@ -225,7 +243,7 @@ public class BluetoothModule implements Communicatable {
                     }
                 }
             } catch (IOException ex) {
-                disp.printException("BT:IOEx receive Data");
+                disp.printMessage("BT:IOEx receive Data");
             }
         }
 
@@ -244,7 +262,7 @@ public class BluetoothModule implements Communicatable {
                     break;
                 }
             } catch (IOException ex) {
-                disp.printException("BT:IOEx receive chr");
+                disp.printMessage("BT:IOEx receive chr");
             }
         }
         return dd;
@@ -256,11 +274,11 @@ public class BluetoothModule implements Communicatable {
             int[] coord = this.get_coordinate_data();
             this.coordinate.setCoordinate(coord[0], coord[1]);
         } catch (NumberFormatException e) {
-            disp.printException("BT:NFEx");
+            disp.printMessage("BT:NFEx");
         } catch (IOException ex) {
-            disp.printException("BT:IOEx");
-        }catch(InvaliedData ex){
-            disp.printException("BT:InvalidData");
+            disp.printMessage("BT:IOEx");
+        } catch (InvaliedData ex) {
+            disp.printMessage("BT:InvalidData");
         }
 
 
@@ -274,10 +292,10 @@ public class BluetoothModule implements Communicatable {
                 c = receiveChar();
                 if (c == 'l') {
                     currentCommand.setCommand(Commands.LEFTIR);
-                    disp.printCoordinate("LEFTIR");
+                    disp.printMessage("LEFTIR");
                 } else if (c == 'r') {
                     currentCommand.setCommand(Commands.RIGHTIR);
-                    disp.printCoordinate("RIGHTIR");
+                    disp.printMessage("RIGHTIR");
                 }
             }
 
@@ -288,5 +306,152 @@ public class BluetoothModule implements Communicatable {
 
     private void sendOrientationRequest() {
         this.senddata("s");
+    }
+
+    private void sendOrientationStopCommand(){
+        this.senddata("z");
+    }
+    private void getMap() throws NumberFormatException, IOException, InvaliedData {
+
+        //request to send map
+        this.senddata(String.valueOf('m'));
+
+
+        //initialization
+        char dd = 'f';
+        String data = "";
+
+        int height = 0;
+        int width = 0;
+        Boolean[][] floor;
+        int terminalX;
+        int terminalY;
+        int destX;
+        int destY;
+        int[] temp;
+
+
+        //wait for 'h'
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+
+            }
+        } while (dd != 'h');
+
+
+        //start to receive height
+        while (true) {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+                if (dd != 'e') {
+                    data = data.concat(String.valueOf(dd));
+                } else {
+                    break;
+                }
+            }
+        }
+        height = Integer.valueOf(data).intValue();
+
+        //wait for 'w'
+        data = "";
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'w');
+
+        //start to receive width
+        while (true) {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+                if (dd != 'e') {
+                    data = data.concat(String.valueOf(dd));
+                } else if (dd == 'e') {
+                    break;
+                }
+            }
+        }
+        width = Integer.valueOf(data).intValue();
+
+        //initialize the map with all true values
+        floor = new Boolean[width][height];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                floor[x][y] = new Boolean(true);
+            }
+        }
+
+
+        //wait for terminal coordinate
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 't');
+
+        //the terminal point coordinate receiving
+        temp = this.get_coordinate_data();
+        terminalX = temp[0];
+        terminalY = temp[1];
+
+
+        //wait for destination coordinate
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'd');
+
+        //destination coordinate receiving
+        temp = this.get_coordinate_data();
+        destX = temp[0];
+        destY = temp[1];
+
+        //get the invalid coordinates
+
+        //wait for start of 'i'
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'i');
+
+        //get the number of invalid coordinates
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'n');
+
+        while (true) {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+                if (dd != 'e') {
+                    data = data.concat(String.valueOf(dd));
+                } else {
+                    break;
+                }
+            }
+        }
+        int n = Integer.valueOf(data).intValue();
+
+        //start of geting coordinate
+        for (int z = 0; z < n; z++) {
+            temp = get_coordinate_data();
+            floor[temp[0]][temp[1]] = new Boolean(false);
+        }
+
+        //wait for end of connection
+        do {
+            if (in.available() != 0) {
+                dd = (char) in.read();
+            }
+        } while (dd != 'e');
+
+
+        ComponentsLib.ENTC = new CartisianMap(floor, destX, destY, terminalX, terminalY);
+        isMapInitialized = true;
     }
 }
