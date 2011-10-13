@@ -176,7 +176,7 @@ public class Person implements Runnable {
            
         }
 
-        disp.printCoordinate("START SCAN");
+        
 
         //start to aline the person in front of the elevator
         bt.changeSubMode(BluetoothModule.IR);
@@ -192,11 +192,12 @@ public class Person implements Runnable {
 
 
         
-        disp.printCoordinate("Select Up or Down");
-
-        ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
+        
+        
         
         while (true) {
+            disp.printCoordinate("Select Up or Down");
+            ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
             pressedKey = ComponentsLib.pressedKey.getKey();
             if (pressedKey == EventCanvas.U) {
                 ComponentsLib.currentCommand.setCommand(Commands.UP);
@@ -211,6 +212,8 @@ public class Person implements Runnable {
 //        } catch (InterruptedException ex) {
 //            ex.printStackTrace();
 //        }
+        
+        bt.turnOff();
     }
 
     public void exitSystem() {

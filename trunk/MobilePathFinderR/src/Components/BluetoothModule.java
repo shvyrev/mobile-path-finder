@@ -83,6 +83,7 @@ public class BluetoothModule implements Communicatable {
             disp.printMessage("connected");
             Thread.sleep(100);
             if(mode==ELEV){
+                disp.printCoordinate("START SCAN");
                 currentCommand.setCommand(Commands.SCAN);
             }
         } catch (InterruptedException ex) {
