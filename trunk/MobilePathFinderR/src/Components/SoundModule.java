@@ -37,14 +37,14 @@ public class SoundModule implements Runnable {
         ComponentsLib.keyScanner.printException("Sound:INITIALIZING");
         try {
             if (mode == NAVIGATION) {
-                player[0] = Manager.createPlayer(getClass().getResourceAsStream("LEFT.wav"), "audio/x-wav");
-                player[1] = Manager.createPlayer(getClass().getResourceAsStream("LLEFT.wav"), "audio/x-wav");
-                player[2] = Manager.createPlayer(getClass().getResourceAsStream("STRIGHT.wav"), "audio/x-wav");
-                player[3] = Manager.createPlayer(getClass().getResourceAsStream("RRIGHT.wav"), "audio/x-wav");
-                player[4] = Manager.createPlayer(getClass().getResourceAsStream("RIGHT.wav"), "audio/x-wav");
-                player[5] = Manager.createPlayer(getClass().getResourceAsStream("BACK.wav"), "audio/x-wav");
-                player[7] = Manager.createPlayer(getClass().getResourceAsStream("ARRIVED.wav"), "audio/x-wav");
-                player[8] = Manager.createPlayer(getClass().getResourceAsStream("SCAN.wav"), "audio/x-wav");
+                player[0] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LEFT.wav"), "audio/x-wav");
+                player[1] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LLEFT.wav"), "audio/x-wav");
+                player[2] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/STRIGHT.wav"), "audio/x-wav");
+                player[3] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RRIGHT.wav"), "audio/x-wav");
+                player[4] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RIGHT.wav"), "audio/x-wav");
+                player[5] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/BACK.wav"), "audio/x-wav");
+                player[7] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/ARRIVED.wav"), "audio/x-wav");
+                player[8] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SCAN.wav"), "audio/x-wav");
                 for (int i = 0; i <= 8; i++) {
                     if (i == 6) {
                         continue;
@@ -62,11 +62,11 @@ public class SoundModule implements Runnable {
                     player[i].deallocate();
                 }
 
-                player[9] = Manager.createPlayer(getClass().getResourceAsStream("L.wav"), "audio/x-wav");
-                player[10] = Manager.createPlayer(getClass().getResourceAsStream("R.wav"), "audio/x-wav");
-                player[11] = Manager.createPlayer(getClass().getResourceAsStream("SELECT.wav"), "audio/x-wav");
-                player[12] = Manager.createPlayer(getClass().getResourceAsStream("UP.wav"), "audio/x-wav");
-                player[13] = Manager.createPlayer(getClass().getResourceAsStream("DOWN.wav"), "audio/x-wav");
+                player[9] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/L.wav"), "audio/x-wav");
+                player[10] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/R.wav"), "audio/x-wav");
+                player[11] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SELECT.wav"), "audio/x-wav");
+                player[12] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/UP.wav"), "audio/x-wav");
+                player[13] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/DOWN.wav"), "audio/x-wav");
 
                 for (int i = 9; i <= 13; i++) {
                     player[i].prefetch();
