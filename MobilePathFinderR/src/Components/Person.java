@@ -170,11 +170,11 @@ public class Person implements Runnable {
             }
 
         }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-           
-        }
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException ex) {
+//           
+//        }
 
         
 
@@ -187,33 +187,38 @@ public class Person implements Runnable {
 
 
         //here the flow of the programme should be reviewed.
-        int pressedKey = ComponentsLib.pressedKey.getKey();
-        bt.changeSubMode(BluetoothModule.UPDOWN);
-
-
+         ComponentsLib.pressedKey.getKey();
+         bt.changeSubMode(BluetoothModule.UPDOWN);
+       
+//        bt.changeSubMode(BluetoothModule.UPDOWN);
+//
+//
+//        
+//        
+//        
+//        
+//        while (true) {
+//            disp.printCoordinate("Select Up or Down");
+//            ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
+//            pressedKey = ComponentsLib.pressedKey.getKey();
+//            if (pressedKey == EventCanvas.U) {
+//                ComponentsLib.currentCommand.setCommand(Commands.UP);
+//                ComponentsLib.elevator.setData(Elevator.UP);
+//                disp.printCoordinate("Up selected");
+//                break;
+//            } else if (pressedKey == EventCanvas.D) {
+//                ComponentsLib.currentCommand.setCommand(Commands.DOWN);
+//                ComponentsLib.elevator.setData(Elevator.DOWN);
+//                disp.printCoordinate("Down selected");
+//                break;
+//            }
+//        }
         
-        
-        
-        
-        while (true) {
-            disp.printCoordinate("Select Up or Down");
-            ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
-            pressedKey = ComponentsLib.pressedKey.getKey();
-            if (pressedKey == EventCanvas.U) {
-                ComponentsLib.currentCommand.setCommand(Commands.UP);
-                disp.printCoordinate("Up selected");
-                break;
-            } else if (pressedKey == EventCanvas.D) {
-                ComponentsLib.currentCommand.setCommand(Commands.DOWN);
-                disp.printCoordinate("Down selected");
-                break;
-            }
-        }
 //        } catch (InterruptedException ex) {
 //            ex.printStackTrace();
 //        }
         
-        bt.turnOff();
+        //bt.turnOff();
     }
 
     public void exitSystem() {

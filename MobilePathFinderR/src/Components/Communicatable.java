@@ -25,7 +25,7 @@ public interface Communicatable extends Runnable {
     int CLOSEDOOR = 2;
     //Bluetooth URL
     String ELEVATOR = "btspp://0015833D0A57:1;authenticate=false;encrypt=false;master=false";
-    String HANDHELD = "btspp://0015833D0A57:1;authenticate=false;encrypt=false;master=false";
+    String HANDHELD = "btspp://001106220296:1;authenticate=false;encrypt=false;master=false";
 
     //ajanthan pc:btspp://001FE1F85EB2:1;authenticate=false;encrypt=false;master=false
     //hanaheld:btspp://001106220300:1;authenticate=false;encrypt=false;master=false

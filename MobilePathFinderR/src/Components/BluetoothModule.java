@@ -25,7 +25,6 @@ public class BluetoothModule implements Communicatable {
     private EventCanvas disp;
     // current bluetooth device
     private String btUrl = HANDHELD;
-    //
     // current connection
     private int state = INITIATE;
     private int mode = HAND;
@@ -47,7 +46,7 @@ public class BluetoothModule implements Communicatable {
         while (true) {
             if (state == INITIATE) {
                 this.connect();
-                
+
             } else if (state == CONNECTED) {
                 if (mode == HAND) {
                     if (!isMapInitialized) {
@@ -59,9 +58,10 @@ public class BluetoothModule implements Communicatable {
                     }
                     disp.printMessage("Receiving Coordinate");
                     this.receiveCoordinate();
+
                 } else if (mode == ELEV) {
                     disp.printMessage("On Elevator Control Flow");
-                     
+
                     this.elevatorControlFlow();
                 } else {
                     close();
@@ -82,12 +82,13 @@ public class BluetoothModule implements Communicatable {
             state = CONNECTED;
             disp.printMessage("connected");
             Thread.sleep(100);
-            if(mode==ELEV){
+            if (mode == ELEV) {
                 disp.printCoordinate("START SCAN");
                 currentCommand.setCommand(Commands.SCAN);
+            } else if (mode == HAND) {
+                this.senddata(String.valueOf('s'));
             }
         } catch (InterruptedException ex) {
-            
         } catch (IOException e) {
             disp.printMessage("BT: IOEx connection");
             close();
@@ -130,8 +131,8 @@ public class BluetoothModule implements Communicatable {
             }
             out.write(comm.getBytes());
             out.flush();
-            out.close();
-            out = null;
+            //out.close();
+            //out = null;
             //disp.append("sent:" + comm);
             return true;
         } catch (IOException ex) {
@@ -161,8 +162,8 @@ public class BluetoothModule implements Communicatable {
 
     public void changeSubMode(int submode) {
         this.subMode = submode;
-        if(submode==UPDOWN){
-           this.sendOrientationStopCommand();
+        if (submode == UPDOWN) {
+            this.sendOrientationStopCommand();
         }
     }
 
@@ -176,7 +177,9 @@ public class BluetoothModule implements Communicatable {
         do {
             if (in.available() != 0) {
                 dd = (char) in.read();
-
+            }
+            if (mode != HAND) {
+                return null;
             }
         } while (dd != 'x');
 
@@ -271,16 +274,24 @@ public class BluetoothModule implements Communicatable {
     }
 
     public void receiveCoordinate() {
+        int[] coord = {0, 0};
         try {
-            int[] coord = this.get_coordinate_data();
-            this.coordinate.setCoordinate(coord[0], coord[1]);
+            coord = this.get_coordinate_data();
+            if (coord != null) {
+                this.coordinate.setCoordinate(coord[0], coord[1]);
+            }
         } catch (NumberFormatException e) {
             disp.printMessage("BT:NFEx");
         } catch (IOException ex) {
             disp.printMessage("BT:IOEx");
         } catch (InvaliedData ex) {
             disp.printMessage("BT:InvalidData");
+        } finally {
+            if (mode ==HAND) {
+                this.senddata(String.valueOf('s'));
+            }
         }
+
 
 
     }
@@ -301,6 +312,31 @@ public class BluetoothModule implements Communicatable {
             }
 
         } else if (subMode == UPDOWN) {
+            int pressedKey;
+            while (true) {
+                disp.printCoordinate("Select Up or Down");
+                ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
+                pressedKey = ComponentsLib.pressedKey.getKey();
+                if (pressedKey == EventCanvas.U) {
+                    ComponentsLib.currentCommand.setCommand(Commands.UP);
+                    ComponentsLib.elevator.setData(Elevator.UP);
+                    senddata(String.valueOf('u'));
+                    disp.printCoordinate("Up selected");
+                    break;
+                } else if (pressedKey == EventCanvas.D) {
+                    ComponentsLib.currentCommand.setCommand(Commands.DOWN);
+                    ComponentsLib.elevator.setData(Elevator.DOWN);
+                    senddata(String.valueOf('d'));
+                    disp.printCoordinate("Down selected");
+                    break;
+                }
+            }
+//            int x = ComponentsLib.elevator.getData();
+//            if (x == Elevator.UP) {
+//                this.senddata(String.valueOf('u'));
+//            } else if (x == Elevator.DOWN) {
+//                this.senddata(String.valueOf('d'));
+//            }
         } else if (subMode == CLOSEDOOR) {
         }
     }
@@ -309,9 +345,10 @@ public class BluetoothModule implements Communicatable {
         this.senddata("s");
     }
 
-    private void sendOrientationStopCommand(){
+    private void sendOrientationStopCommand() {
         this.senddata("z");
     }
+
     private void getMap() throws NumberFormatException, IOException, InvaliedData {
 
         //request to send map
@@ -413,6 +450,8 @@ public class BluetoothModule implements Communicatable {
         //get the invalid coordinates
 
         //wait for start of 'i'
+
+        data = "";
         do {
             if (in.available() != 0) {
                 dd = (char) in.read();

@@ -24,10 +24,11 @@ public class ComponentsLib {
    public static Commands currentCommand;
    public static SoundModule soundModule;
    
-   public static Coordinate coordinate;
+    public static Coordinate coordinate;
     public  static Map ENTC;
     public final static Map RANDOM;
     
+   public static Elevator elevator =new Elevator();
     
     
     static{
