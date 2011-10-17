@@ -20,6 +20,8 @@ public class EventCanvas extends Canvas implements Runnable {
     public static int U=-1;
     public static int D=-2;
     
+    
+    
     int startY=0;
     int stringY=getHeight()/6;
     String displayString = "";

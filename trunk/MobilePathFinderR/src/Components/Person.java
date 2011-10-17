@@ -15,7 +15,6 @@ import DataStructure.Path;
 import Exceptions.IllegalCoordinate;
 import Exceptions.SameCoordinate;
 import Exceptions.WalkingDistanceError;
-import test.utils.CoordinateServer;
 
 /**
  *
@@ -46,6 +45,7 @@ public class Person implements Runnable {
     private Navigator nav;
     //helps to get coordinate and help to call lift
     private Communicatable bt;
+    private Bluetooth bt1;
     //display
     EventCanvas disp;
     //properties of person
@@ -65,9 +65,10 @@ public class Person implements Runnable {
         direction = startingDir;
         way = new Path();
         way.appendStep(startX, startY);
-        bt = new BluetoothModule(BluetoothModule.HANDHELD);
+       // bt = new BluetoothModule(BluetoothModule.HANDHELD);
         //bt = new CoordinateServer(0, 0, m);
         disp = ComponentsLib.keyScanner;
+        bt1=new Bluetooth();
 
 
         this.map = m;
@@ -77,7 +78,7 @@ public class Person implements Runnable {
         this.command = ComponentsLib.currentCommand;
 
         //communicator and sound module threads are initialized and started
-        Thread communicator = new Thread(bt);
+        Thread communicator = new Thread(bt1);
         Thread soundModule = new Thread(ComponentsLib.soundModule);
         communicator.start();
         soundModule.start();
@@ -145,6 +146,7 @@ public class Person implements Runnable {
     }
 
     public void run() {
+        
 
 
         //navigation part:
@@ -163,6 +165,7 @@ public class Person implements Runnable {
                 disp.printCoordinate("unbelievable step length");
             } catch (IllegalCoordinate ex) {
                 disp.printCoordinate("illegal coordinate");
+                ComponentsLib.currentCommand.setCommand(Commands.BACK);
             } catch (SameCoordinate ex) {
                 ComponentsLib.currentCommand.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
                 disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
@@ -176,49 +179,14 @@ public class Person implements Runnable {
 //           
 //        }
 
-        
+
 
         //start to aline the person in front of the elevator
-        bt.changeSubMode(BluetoothModule.IR);
-        bt.changeMode(BluetoothModule.ELEV);
+        bt1.changeMode();
 
+        ComponentsLib.pressedKey.getKey();
+        bt1.changeSubMode();
 
-       
-
-
-        //here the flow of the programme should be reviewed.
-         ComponentsLib.pressedKey.getKey();
-         bt.changeSubMode(BluetoothModule.UPDOWN);
-       
-//        bt.changeSubMode(BluetoothModule.UPDOWN);
-//
-//
-//        
-//        
-//        
-//        
-//        while (true) {
-//            disp.printCoordinate("Select Up or Down");
-//            ComponentsLib.currentCommand.setCommand(Commands.SELECTUPORDOWN);
-//            pressedKey = ComponentsLib.pressedKey.getKey();
-//            if (pressedKey == EventCanvas.U) {
-//                ComponentsLib.currentCommand.setCommand(Commands.UP);
-//                ComponentsLib.elevator.setData(Elevator.UP);
-//                disp.printCoordinate("Up selected");
-//                break;
-//            } else if (pressedKey == EventCanvas.D) {
-//                ComponentsLib.currentCommand.setCommand(Commands.DOWN);
-//                ComponentsLib.elevator.setData(Elevator.DOWN);
-//                disp.printCoordinate("Down selected");
-//                break;
-//            }
-//        }
-        
-//        } catch (InterruptedException ex) {
-//            ex.printStackTrace();
-//        }
-        
-        //bt.turnOff();
     }
 
     public void exitSystem() {
