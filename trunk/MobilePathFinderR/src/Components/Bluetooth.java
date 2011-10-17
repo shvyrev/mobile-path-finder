@@ -17,7 +17,7 @@ import javax.microedition.io.StreamConnection;
  *
  * @author rajeevan
  */
-public class Bluetooth implements Runnable {
+public class Bluetooth implements Communicatable {
 
     //##############################################################################################
     private static final char ERROR = '.';
@@ -145,7 +145,7 @@ public class Bluetooth implements Runnable {
         modeChanged = true;
     }
 
-    private void turnOff() {
+    public void turnOff() {
         close();
         state = TURNOFF;
         modeChanged = true;
