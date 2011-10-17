@@ -45,7 +45,6 @@ public class Person implements Runnable {
     private Navigator nav;
     //helps to get coordinate and help to call lift
     private Communicatable bt;
-    private Bluetooth bt1;
     //display
     EventCanvas disp;
     //properties of person
@@ -65,10 +64,9 @@ public class Person implements Runnable {
         direction = startingDir;
         way = new Path();
         way.appendStep(startX, startY);
-       // bt = new BluetoothModule(BluetoothModule.HANDHELD);
         //bt = new CoordinateServer(0, 0, m);
         disp = ComponentsLib.keyScanner;
-        bt1=new Bluetooth();
+        bt = new Bluetooth();
 
 
         this.map = m;
@@ -78,7 +76,7 @@ public class Person implements Runnable {
         this.command = ComponentsLib.currentCommand;
 
         //communicator and sound module threads are initialized and started
-        Thread communicator = new Thread(bt1);
+        Thread communicator = new Thread(bt);
         Thread soundModule = new Thread(ComponentsLib.soundModule);
         communicator.start();
         soundModule.start();
@@ -146,7 +144,7 @@ public class Person implements Runnable {
     }
 
     public void run() {
-        
+
 
 
         //navigation part:
@@ -159,33 +157,26 @@ public class Person implements Runnable {
                     break;
                 }
                 pf.findPath(currentX, currentY, terminalX, terminalY, map);
-                ComponentsLib.currentCommand.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
+                command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
                 disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
             } catch (WalkingDistanceError ex) {
                 disp.printCoordinate("unbelievable step length");
             } catch (IllegalCoordinate ex) {
                 disp.printCoordinate("illegal coordinate");
-                ComponentsLib.currentCommand.setCommand(Commands.BACK);
+                command.setCommand(Commands.BACK);
             } catch (SameCoordinate ex) {
-                ComponentsLib.currentCommand.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
+                command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
                 disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
                 disp.printCoordinate("same coordinate arrived");
             }
-
         }
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException ex) {
-//           
-//        }
-
-
 
         //start to aline the person in front of the elevator
-        bt1.changeMode();
+        bt.changeMode();
 
         ComponentsLib.pressedKey.getKey();
-        bt1.changeSubMode();
+        //allow person to choose UP or Down
+        bt.changeSubMode();
 
     }
 

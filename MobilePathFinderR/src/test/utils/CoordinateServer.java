@@ -19,9 +19,7 @@ public class CoordinateServer implements Communicatable {
     Map m;
     int currentX, currentY;
     private Coordinate coordinate;
-    private int mode=INITIATE;
-    private int subMode;
-    private String btUrl=HANDHELD;
+
 
     public CoordinateServer(int x, int y,Map m) {
         this.currentX = x;
@@ -56,7 +54,7 @@ public class CoordinateServer implements Communicatable {
                     currentX += x;
                     currentY += y;
                     coordinate.setCoordinate(currentX, currentY);
-                    System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
+                    //System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
                 try {
                    
                     Thread.sleep(3000);
@@ -79,8 +77,7 @@ public class CoordinateServer implements Communicatable {
     }
 
     public void changeSubMode(int mode) {
-        System.out.println("now the submode is "+mode);
-        this.subMode = mode;
+        
     }
 
     public void elevatorControlFlow() {
@@ -105,6 +102,14 @@ public class CoordinateServer implements Communicatable {
     }
 
     public void turnOff() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void changeMode() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void changeSubMode() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
