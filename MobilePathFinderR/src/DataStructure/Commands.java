@@ -4,8 +4,6 @@
  */
 package DataStructure;
 
-import Components.ComponentsLib;
-
 /**
  *
  * @author rajeevan
@@ -28,9 +26,11 @@ public class Commands {
     public static final int SELECTUPORDOWN = 11;
     public static final int UP = 12;
     public static final int DOWN = 13;
-    public static final int CONFORM = 14;
-    public static final int WAITING = 15;
+    public static final int CONFORM = 18;
+    public static final int WAITING = 14;
+     public static final int STEPIN=15;
     public static final int CLOSING = 16;
+    
     //commands that taken from the person
     public static final int STOPSCAN = 17;
 
@@ -82,9 +82,9 @@ public class Commands {
             case 13:
                 return "DOWN";
             case 14:
-                return "CONFORM";
-            case 15:
                 return "WAITING";
+            case 15:
+                return "STEPIN";
             case 16:
                 return "CLOSING";
 
