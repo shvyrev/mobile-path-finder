@@ -179,7 +179,7 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
             startMIDlet();
             ComponentsLib.keyScanner = new EventCanvas(this);
             this.getDisplay().setCurrent(ComponentsLib.keyScanner);
-            p = new Person(0, 0, Direction.d_90, ComponentsLib.RANDOM);
+            p = new Person(0, 0, Direction.d_90, ComponentsLib.ENTC);
             Thread person = new Thread(p);
             person.start();
         }

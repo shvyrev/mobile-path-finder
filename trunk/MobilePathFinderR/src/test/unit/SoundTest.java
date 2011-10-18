@@ -110,6 +110,7 @@ public class SoundTest extends MIDlet implements CommandListener{
             this.getDisplay().setCurrent(ComponentsLib.keyScanner);
             ComponentsLib.soundModule=new SoundModule();
             Thread sound=new Thread(ComponentsLib.soundModule);
+            sound.start();
             for(int i=0;i<17;i++){
                 if(i==6){
                     continue;
