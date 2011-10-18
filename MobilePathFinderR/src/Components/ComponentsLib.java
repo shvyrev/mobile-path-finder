@@ -33,12 +33,12 @@ public class ComponentsLib {
     
     static{
         Boolean[][] floor;
-        floor=new Boolean[36][17];
-        fillFloor(0, 0, 35, 16, floor, Boolean.TRUE);
-        fillFloor(28, 0, 35, 10,floor,Boolean.FALSE);///wall and stonebench
-        fillFloor(0, 11, 5,16, floor,Boolean.FALSE);// reception table
-        fillFloor(10,6,17,8,floor,Boolean.FALSE); // virtual obstacle
-       ENTC=new CartisianMap(floor,3,4,2,2);
+        floor=new Boolean[31][15];
+        fillFloor(0, 0, 30, 14, floor, Boolean.TRUE);
+        fillFloor(23, 0, 30, 10,floor,Boolean.FALSE);///wall and stonebench
+        fillFloor(0, 10, 5,14, floor,Boolean.FALSE);// reception table
+        //fillFloor(10,6,17,8,floor,Boolean.FALSE); // virtual obstacle
+       ENTC=new CartisianMap(floor,28,10,28,12);
        
        
         

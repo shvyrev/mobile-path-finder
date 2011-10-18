@@ -194,9 +194,6 @@ public class Bluetooth implements Communicatable {
             if (in.available() != 0) {
                 temp = (char) in.read();
             }
-            if (modeChanged) {
-                return ERROR;
-            }
         } while (temp != stopChar);
         return temp;
     }
@@ -266,13 +263,19 @@ public class Bluetooth implements Communicatable {
             disp.printMessage("COORDINATE MODE");
 
             int[] tempCoord = {0, 0};
-            //send start sequence 
-            sendStartSeq();
-            while (!modeChanged) {
+            
+            
+            //sendStartSeq();
+            while(!modeChanged){
+                //send start sequence 
+                sendStartSeq(); 
                 try {
                     tempCoord = receiveCoordinate();
-                    if (tempCoord != null) {
+                    if (!modeChanged) {
                         coordinate.setCoordinate(tempCoord[0], tempCoord[1]);
+                    }else{
+                        sendExitSeq();
+                        break;
                     }
                 } catch (NumberFormatException e) {
                     disp.printMessage("BT:NFEx handheldflow");
@@ -280,13 +283,9 @@ public class Bluetooth implements Communicatable {
                     disp.printMessage("BT:IOEx handheld flow");
                 } catch (InvaliedData ex) {
                     disp.printMessage("BT:InvalidData handheld flow");
-                } finally {
-                    if (!modeChanged) {
-                        senddata(String.valueOf('s'));
-                    }
                 }
+
             }
-            //send Exit Seq to start IR transmission
             sendExitSeq();
         } else if (subMode == IROFF) {
             disp.printMessage("IROFF");

@@ -155,6 +155,7 @@ public class Person implements Runnable {
                     disp.printCoordinate("DEST ARRIVED");
                     command.setCommand(Commands.ARRIVED);
                     break;
+                    
                 }
                 pf.findPath(currentX, currentY, terminalX, terminalY, map);
                 command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
@@ -174,6 +175,7 @@ public class Person implements Runnable {
         //start to aline the person in front of the elevator
         bt.changeMode();
 
+        
         ComponentsLib.pressedKey.getKey();
         //allow person to choose UP or Down
         bt.changeSubMode();
