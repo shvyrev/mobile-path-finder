@@ -15,6 +15,14 @@ public class Coordinate {
     private int x;
     private int y;
     private boolean updated;
+    
+    public Coordinate(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
+    public Coordinate(){
+        
+    }
 
     public synchronized int[] getCoordinate() {
         
@@ -38,5 +46,14 @@ public class Coordinate {
 
     public boolean hasUpdate() {
         return updated;
+    }
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+    public String toString(){
+        return "X:"+x+"Y:"+y;
     }
 }

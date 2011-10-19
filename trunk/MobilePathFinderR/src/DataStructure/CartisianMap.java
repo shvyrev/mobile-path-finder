@@ -20,6 +20,11 @@ public class CartisianMap implements Map {
     //true ==> can travel false==> obstacle
     private Boolean[][] floor = new Boolean[width][height];
     private Path path;
+    
+    
+    //////////////////////////////////////
+    private Coordinate[]tempCoord;
+//////////////////////////////////////////
 
     public CartisianMap(Boolean[][] floor, int destX, int destY, int terminalX, int terminalY) {
         this.width = floor.length;
@@ -30,6 +35,12 @@ public class CartisianMap implements Map {
         this.destY = destY;
         this.terminalX = terminalX;
         this.terminalY = terminalY;
+        this.tempCoord=new Coordinate[]{new Coordinate(0,0)};
+    }
+    
+    public CartisianMap(Boolean[][] floor, int destX, int destY, int terminalX, int terminalY,Coordinate[]tempPath){
+        this(floor,destX,destY,terminalX,terminalY);
+        tempCoord=tempPath;
     }
 
     public int getWidth() {
@@ -97,5 +108,19 @@ public class CartisianMap implements Map {
 
     public int getTerminalY() {
         return this.terminalY;
+    }
+
+    public Coordinate getTerminal(int currentX,int currentY) {
+        try{
+        for(int i=0;i<tempCoord.length;i++){
+            if(currentX<tempCoord[i].getX()&&currentY<tempCoord[i].getY()){
+                return tempCoord[i];
+            }
+        }
+        }catch(NullPointerException e){
+            
+        }
+            
+        return new Coordinate(terminalX,terminalY);
     }
 }
