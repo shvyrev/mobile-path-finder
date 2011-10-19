@@ -38,7 +38,8 @@ public class ComponentsLib {
         fillFloor(23, 0, 30, 10,floor,Boolean.FALSE);///wall and stonebench
         fillFloor(0, 10, 5,14, floor,Boolean.FALSE);// reception table
         //fillFloor(10,6,17,8,floor,Boolean.FALSE); // virtual obstacle
-       ENTC=new CartisianMap(floor,28,10,28,12);
+        Coordinate[]temp={new Coordinate(8,8),new Coordinate(12,12)};
+       ENTC=new CartisianMap(floor,28,10,28,12,temp);
        
        
         

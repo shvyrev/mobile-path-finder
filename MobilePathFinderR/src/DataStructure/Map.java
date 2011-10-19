@@ -31,4 +31,10 @@ public interface Map {
     public int getTerminalX();
 
     public int getTerminalY();
+    
+    public Coordinate getTerminal(int currentX,int currentY);
+        
+    
+    
+    
 }

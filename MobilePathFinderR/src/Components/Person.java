@@ -144,22 +144,25 @@ public class Person implements Runnable {
     }
 
     public void run() {
-
-
-
+        Coordinate tempTerminal;
         //navigation part:
         while (true) {
+           
             try {
                 updatePosition();
+                
                 if ((currentX == terminalX && currentY == terminalY)) {
                     disp.printCoordinate("DEST ARRIVED");
                     command.setCommand(Commands.ARRIVED);
                     break;
                     
                 }
-                pf.findPath(currentX, currentY, terminalX, terminalY, map);
+                tempTerminal=map.getTerminal(currentX, currentY);
+                disp.printCoordinate(tempTerminal.toString());
+                pf.findPath(currentX, currentY, tempTerminal.getX(), tempTerminal.getY(), map);
+              
                 command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
-                disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
+                //disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
             } catch (WalkingDistanceError ex) {
                 disp.printCoordinate("unbelievable step length");
             } catch (IllegalCoordinate ex) {
