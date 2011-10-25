@@ -73,9 +73,7 @@ public class AStarPathFinder implements PathFinder {
             } else if (f > of) {
                 return 1;
             } else {
-                //System.out.println("this is not cool");
                 return 0;
-
             }
         }
 
@@ -233,13 +231,10 @@ public class AStarPathFinder implements PathFinder {
      * Check if a given location is valid for the supplied mover
      */
     private boolean isValidLocation(int sx, int sy, int x, int y,Map map) {
-
         boolean invalid = (x < 0) || (y < 0) || (x >= map.getWidth()) || (y >= map.getHeight());
-
         if ((!invalid) && ((sx != x) || (sy != y))) {
             invalid = map.isBlocked(x, y).booleanValue();
         }
-
         return !invalid;
     }
 

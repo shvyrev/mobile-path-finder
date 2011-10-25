@@ -37,7 +37,9 @@ public class Direction {
         this.currentDirection = CurrentDirection;
     }
 
-    
+    public static Direction getDirection(Coordinate start,Coordinate end){
+       return Direction.getDirection(start.getX(),start.getY(), end.getX(),end.getY());
+    }
 
     public static Direction getDirection(int startX, int startY, int endX, int endY) {
         float m;
@@ -120,4 +122,40 @@ public class Direction {
             return false;
         }
     }
+    
+    private static boolean isForwardDirection(Direction start,Direction end){
+        Direction d=getDirection(start, end);
+        if(d.equals(d_135)||d.equals(d_180)||d.equals(d_225)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+    
+    public static Coordinate[] getForwardArea(Coordinate currentCoordinate,Direction currentDirection){
+        Coordinate[] temp=new Coordinate[5];
+        Direction tempDir;
+        Coordinate tempCoord;
+        int index=0;
+        for(int x=-1;x<=1;x++){
+            for(int y=-1;y<=1;y++){
+                if(x==0&&y==0){
+                    continue;
+                }
+                tempCoord=new Coordinate(currentCoordinate.getX()+x,currentCoordinate.getY()+y);
+                        
+               tempDir=Direction.getDirection(currentCoordinate,tempCoord );
+                //System.out.println(tempDir);
+                if(isForwardDirection(currentDirection,tempDir)){
+                    //System.out.println(tempDir);
+                    //System.out.println(tempCoord);
+                    temp[index]=tempCoord;
+                    index++;
+                }
+            }
+        }
+        
+        return temp;
+    }
+    //public 
 }

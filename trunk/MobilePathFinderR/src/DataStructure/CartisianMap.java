@@ -4,6 +4,8 @@
  */
 package DataStructure;
 
+import Components.ComponentsLib;
+
 /**
  *
  * @author rajeevan
@@ -35,7 +37,7 @@ public class CartisianMap implements Map {
         this.destY = destY;
         this.terminalX = terminalX;
         this.terminalY = terminalY;
-        this.tempCoord=new Coordinate[]{new Coordinate(0,0)};
+        this.tempCoord=new Coordinate[]{new Coordinate(terminalX,terminalY)};
     }
     
     public CartisianMap(Boolean[][] floor, int destX, int destY, int terminalX, int terminalY,Coordinate[]tempPath){
@@ -78,7 +80,6 @@ public class CartisianMap implements Map {
             }
             s += "\n";
         }
-
         return s;
     }
 
@@ -113,14 +114,46 @@ public class CartisianMap implements Map {
     public Coordinate getTerminal(int currentX,int currentY) {
         try{
         for(int i=0;i<tempCoord.length;i++){
-            if(currentX<tempCoord[i].getX()&&currentY<tempCoord[i].getY()){
+            if(!(currentX==tempCoord[i].getX()&&currentY==tempCoord[i].getY())){
+            if(currentX>=tempCoord[i].getX()&&currentY>=tempCoord[i].getY()){
                 return tempCoord[i];
+            }
             }
         }
         }catch(NullPointerException e){
-            
+            ComponentsLib.keyScanner.printException("MAP:NUll pointer");
         }
             
         return new Coordinate(terminalX,terminalY);
     }
+
+    public Coordinate getDest() {
+        return new Coordinate(destX,destY);
+    }
+
+    public boolean hasObstacleInRange(Coordinate currentPosition,Direction currentDirection) {
+        Direction temp;
+       for(int x=-1;x<=1;x++){
+           for(int y=-1;y<=1;y++){
+               temp=Direction.getDirection(currentPosition.getX(),currentPosition.getY(), (currentPosition.getX()+x),(currentPosition.getY()+y));
+               temp=Direction.getDirection(currentDirection, temp);
+              
+               
+           }
+          
+       }
+       return false;
+    }
+
+    public Direction getObstacleDirection(Coordinate currentPosition,Direction currentDirection) {
+      Coordinate[]forward= Direction.getForwardArea(currentPosition, currentDirection);
+      for(int i=0;i<5;i++){
+          if(isBlocked(forward[i].getX(), forward[i].getY()).booleanValue()){
+              return Direction.getDirection(currentPosition, currentPosition);
+          }
+      }
+      return null;
+    }
+
+    
 }

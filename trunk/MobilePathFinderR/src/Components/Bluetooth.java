@@ -268,6 +268,7 @@ public class Bluetooth implements Communicatable {
             //sendStartSeq();
             while(!modeChanged){
                 //send start sequence 
+                ComponentsLib.pressedKey.getKey();
                 sendStartSeq(); 
                 try {
                     tempCoord = receiveCoordinate();
