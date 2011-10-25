@@ -2,11 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
+package test.unit;
 
-import Components.ComponentsLib;
-import Components.EventCanvas;
-import Components.Person;
+import DataStructure.Coordinate;
 import DataStructure.Direction;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
@@ -14,26 +12,23 @@ import javax.microedition.lcdui.*;
 /**
  * @author rajeevan
  */
-public class HelloMIDlet extends MIDlet implements CommandListener {
-    Person p;
+public class DirectionTesting extends MIDlet {
+    
     private boolean midletPaused = false;
-    //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private Command exitCommand;
-    private Form form;
-    private StringItem stringItem;
-    //</editor-fold>//GEN-END:|fields|0|
 
+    //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
+    //</editor-fold>//GEN-END:|fields|0|
     /**
-     * The HelloMIDlet constructor.
+     * The DirectionTesting constructor.
      */
-    public HelloMIDlet() {
+    public DirectionTesting() {
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
     //</editor-fold>//GEN-END:|methods|0|
     //<editor-fold defaultstate="collapsed" desc=" Generated Method: initialize ">//GEN-BEGIN:|0-initialize|0|0-preInitialize
     /**
-     * Initializes the application.
+     * Initilizes the application.
      * It is called only once when the MIDlet is started. The method is called before the <code>startMIDlet</code> method.
      */
     private void initialize() {//GEN-END:|0-initialize|0|0-preInitialize
@@ -49,7 +44,7 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
         // write pre-action user code here
-        switchDisplayable(null, getForm());//GEN-LINE:|3-startMIDlet|1|3-postAction
+//GEN-LINE:|3-startMIDlet|1|3-postAction
         // write post-action user code here
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
@@ -83,72 +78,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
     }//GEN-BEGIN:|5-switchDisplayable|2|
     //</editor-fold>//GEN-END:|5-switchDisplayable|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Method: commandAction for Displayables ">//GEN-BEGIN:|7-commandAction|0|7-preCommandAction
-    /**
-     * Called by a system to indicated that a command has been invoked on a particular displayable.
-     * @param command the Command that was invoked
-     * @param displayable the Displayable where the command was invoked
-     */
-    public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
-        // write pre-action user code here
-        if (displayable == form) {//GEN-BEGIN:|7-commandAction|1|19-preAction
-            if (command == exitCommand) {//GEN-END:|7-commandAction|1|19-preAction
-                // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|2|19-postAction
-                // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|3|7-postCommandAction
-        }//GEN-END:|7-commandAction|3|7-postCommandAction
-        // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|4|
-    //</editor-fold>//GEN-END:|7-commandAction|4|
-
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
-    /**
-     * Returns an initiliazed instance of exitCommand component.
-     * @return the initialized component instance
-     */
-    public Command getExitCommand() {
-        if (exitCommand == null) {//GEN-END:|18-getter|0|18-preInit
-            // write pre-init user code here
-            exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|18-getter|2|
-        return exitCommand;
-    }
-    //</editor-fold>//GEN-END:|18-getter|2|
-
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|14-getter|0|14-preInit
-    /**
-     * Returns an initiliazed instance of form component.
-     * @return the initialized component instance
-     */
-    public Form getForm() {
-        if (form == null) {//GEN-END:|14-getter|0|14-preInit
-            // write pre-init user code here
-            form = new Form("Welcome", new Item[] { getStringItem() });//GEN-BEGIN:|14-getter|1|14-postInit
-            form.addCommand(getExitCommand());
-            form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|14-getter|2|
-        return form;
-    }
-    //</editor-fold>//GEN-END:|14-getter|2|
-
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: stringItem ">//GEN-BEGIN:|16-getter|0|16-preInit
-    /**
-     * Returns an initiliazed instance of stringItem component.
-     * @return the initialized component instance
-     */
-    public StringItem getStringItem() {
-        if (stringItem == null) {//GEN-END:|16-getter|0|16-preInit
-            // write pre-init user code here
-            stringItem = new StringItem("Hello", "Hello, World!");//GEN-LINE:|16-getter|1|16-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|16-getter|2|
-        return stringItem;
-    }
-    //</editor-fold>//GEN-END:|16-getter|2|
-
     /**
      * Returns a display instance.
      * @return the display instance.
@@ -163,7 +92,6 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
     public void exitMIDlet() {
         switchDisplayable(null, null);
         destroyApp(true);
-        p.exitSystem();
         notifyDestroyed();
     }
 
@@ -177,11 +105,10 @@ public class HelloMIDlet extends MIDlet implements CommandListener {
         } else {
             initialize();
             startMIDlet();
-            ComponentsLib.keyScanner = new EventCanvas(this);
-            this.getDisplay().setCurrent(ComponentsLib.keyScanner);
-            p = new Person(26,15, Direction.d_270, ComponentsLib.ENTC);
-            Thread person = new Thread(p);
-            person.start();
+            Coordinate[]temp=new Direction(0).getForwardArea(new Coordinate(5,5), Direction.d_315);
+            for(int x=0;x<5;x++){
+            System.out.println(temp[x]);
+            }
         }
         midletPaused = false;
     }

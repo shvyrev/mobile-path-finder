@@ -36,7 +36,7 @@ public class CoordinateServer implements Communicatable {
         while (true) {
             int a = s.nextInt(100);
             int x, y;
-            if (a <= 80) {
+            if (a <= 20) {
                 x = (r.nextInt(2));
                 y = (r.nextInt(2));
             } else {
@@ -54,7 +54,7 @@ public class CoordinateServer implements Communicatable {
                     currentX += x;
                     currentY += y;
                     coordinate.setCoordinate(currentX, currentY);
-                    //System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
+                    System.out.println("CordinateServer  x=" + currentX + " y=" + currentY);
                 try {
                    
                     Thread.sleep(3000);

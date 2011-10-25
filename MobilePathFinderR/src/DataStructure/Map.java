@@ -34,7 +34,11 @@ public interface Map {
     
     public Coordinate getTerminal(int currentX,int currentY);
         
+    public Coordinate getDest();
     
+    //public boolean hasObstacleInRange(Coordinate currentPosition,Direction currentDirection);
+    
+    public Direction getObstacleDirection(Coordinate currentPosition,Direction currentDirection);
     
     
 }

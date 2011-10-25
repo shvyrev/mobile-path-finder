@@ -34,22 +34,22 @@ public class SoundModule implements Runnable {
 
     private void load() {
         try {
-            player[0] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LEFT.wav"), "audio/x-wav");
-            player[1] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LLEFT.wav"), "audio/x-wav");
-            player[2] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/STRIGHT.wav"), "audio/x-wav");
-            player[3] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RRIGHT.wav"), "audio/x-wav");
-            player[4] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RIGHT.wav"), "audio/x-wav");
-            player[5] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/BACK.wav"), "audio/x-wav");
-            player[7] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/ARRIVED.wav"), "audio/x-wav");
-            player[8] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SCAN.wav"), "audio/x-wav");
-            player[9] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/L.wav"), "audio/x-wav");
-            player[10] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/R.wav"), "audio/x-wav");
-            player[11] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SELECT.wav"), "audio/x-wav");
-            player[12] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/UP.wav"), "audio/x-wav");
-            player[13] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/DOWN.wav"), "audio/x-wav");
-            player[14] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/WAIT.wav"), "audio/x-wav");
-            player[15] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/STEPIN.wav"), "audio/x-wav");
-            player[16] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/CLOSE.wav"), "audio/x-wav");
+            player[0] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LEFT.mp3"), "audio/mpeg");
+            player[1] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/LLEFT.mp3"), "audio/mpeg");
+            player[2] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/STRIGHT.mp3"), "audio/mpeg");
+            player[3] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RRIGHT.mp3"), "audio/mpeg");
+            player[4] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/RIGHT.mp3"), "audio/mpeg");
+            player[5] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/BACK.mp3"), "audio/mpeg");
+            player[7] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/ARRIVED.mp3"), "audio/mpeg");
+            player[8] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SCAN.mp3"), "audio/mpeg");
+            player[9] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/L.mp3"), "audio/mpeg");
+            player[10] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/R.mp3"), "audio/mpeg");
+            player[11] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/SELECT.mp3"), "audio/mpeg");
+            player[12] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/UP.mp3"), "audio/mpeg");
+            player[13] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/DOWN.mp3"), "audio/mpeg");
+            player[14] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/WAIT.mp3"), "audio/mpeg");
+            player[15] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/STEPIN.mp3"), "audio/mpeg");
+            player[16] = Manager.createPlayer(getClass().getResourceAsStream("./Sound/CLOSE.mp3"), "audio/mpeg");
         } catch (MediaException e) {
             ComponentsLib.keyScanner.printException("MedEx on loading");
         } catch (IOException e) {

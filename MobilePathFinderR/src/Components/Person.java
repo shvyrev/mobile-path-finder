@@ -15,6 +15,7 @@ import DataStructure.Path;
 import Exceptions.IllegalCoordinate;
 import Exceptions.SameCoordinate;
 import Exceptions.WalkingDistanceError;
+import test.utils.CoordinateServer;
 
 /**
  *
@@ -64,7 +65,7 @@ public class Person implements Runnable {
         direction = startingDir;
         way = new Path();
         way.appendStep(startX, startY);
-        //bt = new CoordinateServer(0, 0, m);
+     //   bt = new CoordinateServer(27,15, m);
         disp = ComponentsLib.keyScanner;
         bt = new Bluetooth();
 
@@ -98,8 +99,8 @@ public class Person implements Runnable {
         this.stepDeviationFactor = stepDeviationFactor;
     }
 
-    public void updatePosition() throws WalkingDistanceError, IllegalCoordinate, SameCoordinate {
-        //blocked
+    public void updatePosition() throws  IllegalCoordinate, SameCoordinate {
+        //blocked     WalkingDistanceError 
         int[] tempCoordinate = receivedCoordinate.getCoordinate();
         if ((tempCoordinate[0] == currentX && tempCoordinate[1] == currentY)) {
             throw new SameCoordinate();
@@ -107,7 +108,7 @@ public class Person implements Runnable {
             throw new IllegalCoordinate();
         } else {
             double distance = getDistance(tempCoordinate[0], tempCoordinate[1]);
-            if ((distance <= (maximumStepDist * (1 + stepDeviationFactor)))) {
+            //if ((distance <= (maximumStepDist * (1 + stepDeviationFactor)))) {
 
                 if (distance >= maximumStepDist) {
                     maximumStepDist = distance;
@@ -116,9 +117,9 @@ public class Person implements Runnable {
                 currentX = tempCoordinate[0];
                 currentY = tempCoordinate[1];
                 this.way.appendStep(currentX, currentY);
-            } else {
-                throw new WalkingDistanceError();
-            }
+            //} else {
+                //throw new WalkingDistanceError();
+            //}
         }
     }
 
@@ -146,39 +147,44 @@ public class Person implements Runnable {
     public void run() {
         Coordinate tempTerminal;
         //navigation part:
+        ComponentsLib.pressedKey.getWaitKey();
+        command.setCommand(nav.navigateCommand(direction,Direction.getDirection(currentX, currentY, terminalX, terminalY)));
+        disp.printCoordinate("starting.."+command.toString());
         while (true) {
-           
+                
             try {
                 updatePosition();
                 
-                if ((currentX == terminalX && currentY == terminalY)) {
+                if ((currentX <= terminalX+1&&currentX>=terminalX-1 &&currentY<=terminalY+1&&currentY>=terminalY-1)) {
                     disp.printCoordinate("DEST ARRIVED");
                     command.setCommand(Commands.ARRIVED);
+                    ComponentsLib.pressedKey.getWaitKey();
+                    //
+                    //insert  the code to instruct turn to lift direction.
+                    command.setCommand(nav.navigateCommand(direction, Direction.getDirection(currentX,currentY,map.getDest().getX(),map.getDest().getY())));
+                    //
                     break;
+                }else{
                     
                 }
                 tempTerminal=map.getTerminal(currentX, currentY);
-                disp.printCoordinate(tempTerminal.toString());
-                pf.findPath(currentX, currentY, tempTerminal.getX(), tempTerminal.getY(), map);
-              
+                disp.printMessage(tempTerminal.toString());
+                pf.findPath(currentX, currentY, tempTerminal.getX(),tempTerminal.getY(), map);
                 command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
-                //disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
-            } catch (WalkingDistanceError ex) {
-                disp.printCoordinate("unbelievable step length");
+               
+                disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
+                System.out.println(this);
             } catch (IllegalCoordinate ex) {
                 disp.printCoordinate("illegal coordinate");
-                command.setCommand(Commands.BACK);
+                //command.setCommand(Commands.BACK);
             } catch (SameCoordinate ex) {
-                command.setCommand(nav.navigateCommand(direction, map.pathStartingDirection()));
-                disp.printCoordinate(command.toString() + "(" + currentX + "," + currentY + ")");
-                disp.printCoordinate("same coordinate arrived");
+                command.setCommand(Commands.STRIGHT);
+                disp.printCoordinate("same Coordinate"+command.toString()+ "(" + currentX + "," + currentY + ")");
             }
         }
 
         //start to aline the person in front of the elevator
         bt.changeMode();
-
-        
         ComponentsLib.pressedKey.getKey();
         //allow person to choose UP or Down
         bt.changeSubMode();

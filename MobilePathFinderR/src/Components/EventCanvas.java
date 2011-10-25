@@ -32,6 +32,11 @@ public class EventCanvas extends Canvas implements Runnable {
         Thread painter=new Thread(this);
         painter.start();
     }
+    
+    public EventCanvas(Key key,CommandListener c){
+        this(c);
+        this.lastKey=key;
+    }
 
     public Key getPressedKey() {
         return lastKey;
@@ -43,7 +48,7 @@ public class EventCanvas extends Canvas implements Runnable {
     }
 
     protected void paint(Graphics g) {
-        System.out.println("canvas:"+displayString);
+        //System.out.println("canvas:"+displayString);
         g.setColor(0xffffff);
         g.fillRect(0, startY, getWidth(), getHeight()/3);
         g.setColor(0);
